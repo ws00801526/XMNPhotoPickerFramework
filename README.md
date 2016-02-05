@@ -17,8 +17,8 @@
 
 ###3. 使用方法
 
-1. 命令行下 `git clone https://github.com/ws00801526/XMNPhotoPickerKit.git`
-2. 拖动`XMNPhotoPickerKit` 到你的工程内
+1. 命令行下 `git clone https://github.com/ws00801526/XMNPhotoPickerFramework.git`
+2. 拖动`XMNPhotoPickerFramework` 到你的工程内
 3. 导入头文件`XMNPhotoPickerFramework.h` 即可
 4. 具体用法,请参考demo
 
@@ -93,5 +93,7 @@
 
 ```
 
-###4. 感谢
+###4.相关类说明 : [传送门](https://github.com/ws00801526/XMNPhotoPickerFramework/blob/master/XMNPhotoPickerKit-照片选择-类说明.md)
+
+###5. 感谢
 感谢 [GitHub:banchichen](https://github.com/banchichen/TZImagePickerController)

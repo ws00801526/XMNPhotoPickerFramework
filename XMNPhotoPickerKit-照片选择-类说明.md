@@ -4,6 +4,7 @@
 2. 使用`XMNAssetModel` 和`XMNAlbumModel` 封装下获取的result
 3. 自定义`XMNPhotoPickerController`继承`UINavigationController` 来作为选择图片的入口
 
+##[源码传送门](https://github.com/ws00801526/XMNPhotoPickerFramework)
 
 ##1. XMNPhotoPickerKit
 
