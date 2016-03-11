@@ -115,7 +115,8 @@
         self.photoStateButton.hidden = YES;
     }else if (longPressGes.state == UIGestureRecognizerStateChanged) {
         self.tempView.center = CGPointMake(self.tempView.center.x, MIN([longPressGes locationInView:self.keyWindow].y, self.startCenter.y));
-        if (CGRectContainsPoint([self.superview convertRect:self.superview.frame toView:self.keyWindow], self.tempView.center)) {
+        CGRect convertRect = [self.superview convertRect:self.superview.frame toView:self.keyWindow];
+        if (CGRectContainsPoint(CGRectMake(0, convertRect.origin.y, convertRect.size.width, convertRect.size.height), self.tempView.center)) {
             self.tempTipsLabel.hidden = YES;
         }else {
             self.tempTipsLabel.hidden = NO;
