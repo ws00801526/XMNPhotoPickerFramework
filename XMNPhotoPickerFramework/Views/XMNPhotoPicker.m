@@ -144,6 +144,7 @@
     
     __weak typeof(*&self) wSelf = self;
     self.loadingView.hidden = NO;
+    [self.loadingView startAnimating];
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         [[XMNPhotoManager sharedManager] getAlbumsPickingVideoEnable:YES completionBlock:^(NSArray<XMNAlbumModel *> *albums) {
             if (albums && [albums firstObject]) {
@@ -160,6 +161,7 @@
                     dispatch_async(dispatch_get_main_queue(), ^{
                         __weak typeof(*&self) self = wSelf;
                         self.loadingView.hidden = YES;
+                        [self.loadingView stopAnimating];
                         [self.collectionView reloadData];
                     });
                 }];
