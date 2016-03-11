@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
@@ -12,18 +12,18 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="71"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4up-aD-TrO" id="N5C-67-KtM">
-                <rect key="frame" x="0.0" y="0.0" width="287" height="70.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="287" height="70"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="70" placeholderIntrinsicHeight="70" translatesAutoresizingMaskIntoConstraints="NO" id="GSC-nL-jcH">
-                        <rect key="frame" x="0.0" y="0.0" width="70" height="70.5"/>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="70" placeholderIntrinsicHeight="70" translatesAutoresizingMaskIntoConstraints="NO" id="GSC-nL-jcH">
+                        <rect key="frame" x="0.0" y="0.0" width="70" height="70"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="70" id="388-pq-LMF"/>
                             <constraint firstAttribute="height" constant="70" id="hhA-QQ-TMT"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Dt-0b-5ur">
-                        <rect key="frame" x="86" y="0.0" width="177" height="70.5"/>
+                        <rect key="frame" x="86" y="0.0" width="177" height="70"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
@@ -33,7 +33,6 @@
                     <constraint firstItem="6Dt-0b-5ur" firstAttribute="leading" secondItem="GSC-nL-jcH" secondAttribute="trailing" constant="16" id="2d6-MX-ekl"/>
                     <constraint firstItem="GSC-nL-jcH" firstAttribute="centerY" secondItem="N5C-67-KtM" secondAttribute="centerY" id="LUO-wl-AZI"/>
                     <constraint firstAttribute="trailingMargin" secondItem="6Dt-0b-5ur" secondAttribute="trailing" constant="16" id="QFv-uK-ljf"/>
-                    <constraint firstItem="6Dt-0b-5ur" firstAttribute="centerY" secondItem="N5C-67-KtM" secondAttribute="centerY" id="hk2-Ab-MVn"/>
                     <constraint firstAttribute="bottom" secondItem="6Dt-0b-5ur" secondAttribute="bottom" id="jvH-oP-ieE"/>
                     <constraint firstItem="GSC-nL-jcH" firstAttribute="leading" secondItem="N5C-67-KtM" secondAttribute="leading" id="vgX-J2-f8f"/>
                     <constraint firstItem="6Dt-0b-5ur" firstAttribute="top" secondItem="N5C-67-KtM" secondAttribute="top" id="zhg-I7-qz5"/>
