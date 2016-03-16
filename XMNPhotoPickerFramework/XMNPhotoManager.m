@@ -297,6 +297,22 @@
     }
 }
 
+
+/**
+ *  根据asset获取图片的相关信息
+ *  包括图片名称等信息
+ *  @param asset           PHAsset or ALAsset
+ *  @param completionBlock 回调block
+ */
+- (void)getAssetNameWithAsset:(id _Nonnull)asset completionBlock:(void(^ _Nonnull)(NSString *_Nullable info))completionBlock {
+    if ([asset isKindOfClass:[PHAsset class]]) {
+        PHAssetResource *assetResource = [[PHAssetResource assetResourcesForAsset:asset] firstObject];
+        completionBlock ? completionBlock(assetResource ? [assetResource originalFilename] : @"unknown") : nil;
+    } else if ([asset isKindOfClass:[ALAsset class]]) {
+        ALAssetRepresentation *representation = [asset defaultRepresentation];
+        completionBlock ? completionBlock([representation filename]) : nil;
+    }
+}
 /**
  *  根据asset获取Video信息
  *

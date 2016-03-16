@@ -36,6 +36,8 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong, readonly, nullable) UIImage * previewImage;
 /** 获取照片的方向 */
 @property (nonatomic, assign, readonly) UIImageOrientation imageOrientation;
+/** 图片的相关信息 */
+@property (nonatomic, copy  , readonly, nullable)   NSString *filename;
 
 /// ========================================
 /// @name   视频,audio相关信息

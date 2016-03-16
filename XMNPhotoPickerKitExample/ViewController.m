@@ -77,6 +77,7 @@
     __weak typeof(*&self) wSelf = self;
     [photoPickerC setDidFinishPickingPhotosBlock:^(NSArray<UIImage *> *images, NSArray<XMNAssetModel *> *assets) {
         __weak typeof(*&self) self = wSelf;
+        NSLog(@"imageinfo :%@",[[assets firstObject] filename]);
         NSLog(@"picker images :%@ \n\n assets:%@",images,assets);
         
         //!!!如果需要自定义大小的图片 使用下面方法

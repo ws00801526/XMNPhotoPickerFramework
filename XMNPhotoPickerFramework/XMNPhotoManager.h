@@ -110,6 +110,14 @@
 - (void)getAssetSizeWithAsset:(id _Nonnull)asset completionBlock:(void(^ _Nonnull)(CGFloat size))completionBlock;
 
 /**
+ *  根据asset获取图片的相关信息
+ *  包括图片名称等信息
+ *  @param asset           PHAsset or ALAsset
+ *  @param completionBlock 回调block
+ */
+- (void)getAssetNameWithAsset:(id _Nonnull)asset completionBlock:(void(^ _Nonnull)(NSString *_Nullable info))completionBlock;
+
+/**
  *  根据asset获取Video信息
  *
  *  @param asset           PHAsset or ALAsset

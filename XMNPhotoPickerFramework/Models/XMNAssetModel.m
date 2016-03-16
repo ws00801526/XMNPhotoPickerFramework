@@ -39,7 +39,7 @@
 @synthesize imageOrientation = _imageOrientation;
 @synthesize playerItem = _playerItem;
 @synthesize playerItemInfo = _playerItemInfo;
-
+@synthesize filename = _filename;
 
 #pragma mark - Methods
 
@@ -157,6 +157,17 @@
     _playerItem = resultItem ? : _playerItem;
     _playerItemInfo = resultItemInfo;
     return _playerItemInfo;
+}
+
+- (NSString *)filename{
+    if (!_filename) {
+        __block NSString *resultFilename;
+        [[XMNPhotoManager sharedManager] getAssetNameWithAsset:self.asset completionBlock:^(NSString * _Nullable info) {
+            resultFilename = [info copy];
+        }];
+        _filename = [resultFilename copy];
+    }
+    return _filename;
 }
 
 
