@@ -100,7 +100,11 @@ static NSString * const kXMNAssetCellIdentifier = @"XMNAssetCell";
     [self.collectionView registerNib:[UINib nibWithNibName:kXMNAssetCellIdentifier bundle:nil] forCellWithReuseIdentifier:kXMNAssetCellIdentifier];
     
     XMNBottomBar *bottomBar = [[XMNBottomBar alloc] initWithBarType:XMNCollectionBottomBar];
-    bottomBar.frame = CGRectMake(0, self.view.frame.size.height - 50, self.view.frame.size.width, 50);
+    if (iOS9Later) {
+        bottomBar.frame = CGRectMake(0, self.view.frame.size.height - 50, self.view.frame.size.width, 50);
+    }else {
+        bottomBar.frame = CGRectMake(0, self.view.frame.size.height - 50 + 20, self.view.frame.size.width, 50);
+    }
     __weak typeof(*&self) wSelf = self;
     [bottomBar setConfirmBlock:^{
         __weak typeof(*&self) self = wSelf;

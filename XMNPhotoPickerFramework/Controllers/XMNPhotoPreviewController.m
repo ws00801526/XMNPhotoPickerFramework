@@ -197,7 +197,11 @@ static NSString * const kXMNPhotoPreviewIdentifier = @"XMNPhotoPreviewCell";
 - (XMNBottomBar *)bottomBar {
     if (!_bottomBar) {
         _bottomBar = [[XMNBottomBar alloc] initWithBarType:XMNPreviewBottomBar];
-        _bottomBar.frame = CGRectMake(0, self.view.frame.size.height - 50, self.view.frame.size.width, 50);
+        if (iOS9Later) {
+            _bottomBar.frame = CGRectMake(0, self.view.frame.size.height - 50, self.view.frame.size.width, 50);
+        }else {
+            _bottomBar.frame = CGRectMake(0, self.view.frame.size.height - 50 + 20, self.view.frame.size.width, 50);
+        }
         [_bottomBar updateBottomBarWithAssets:self.selectedAssets];
         
         __weak typeof(*&self) wSelf = self;
@@ -217,6 +221,7 @@ static NSString * const kXMNPhotoPreviewIdentifier = @"XMNPhotoPreviewCell";
 + (UICollectionViewLayout *)photoPreviewViewLayoutWithSize:(CGSize)size {
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    
     layout.itemSize = CGSizeMake(size.width, size.height);
     layout.minimumInteritemSpacing = 0;
     layout.minimumLineSpacing = 0;
