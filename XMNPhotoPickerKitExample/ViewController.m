@@ -26,11 +26,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    
-//    self.automaticallyAdjustsScrollViewInsets = NO;
+
+//        self.automaticallyAdjustsScrollViewInsets = NO;
     self.assets = @[];
     
-    [self.view addSubview:self.collectionView];
+    [self.view insertSubview:self.collectionView atIndex:0];
     UIBarButtonItem *controllerItem =  [[UIBarButtonItem alloc] initWithTitle:@"Controller" style:UIBarButtonItemStylePlain target:self action:@selector(_handleButtonAction)];
     UIBarButtonItem *pickerItem = [[UIBarButtonItem alloc] initWithTitle:@"Picker" style:UIBarButtonItemStylePlain target:self action:@selector(_handlePickerAction)];
     self.navigationItem.rightBarButtonItems = @[controllerItem,pickerItem];
@@ -67,7 +67,7 @@
 
 
 
-- (void)_handleButtonAction {
+- (IBAction)_handleButtonAction {
     //1.初始化一个XMNPhotoPickerController
     XMNPhotoPickerController *photoPickerC = [[XMNPhotoPickerController alloc] initWithMaxCount:9 delegate:nil];
     //3.取消注释下面代码,使用代理方式回调,代理方法参考XMNPhotoPickerControllerDelegate
@@ -111,7 +111,7 @@
     [self presentViewController:photoPickerC animated:YES completion:nil];
 }
 
-- (void)_handlePickerAction {
+- (IBAction)_handlePickerAction {
     //1. 推荐使用XMNPhotoPicker 的单例
     //2. 设置选择完照片的block回调
     [[XMNPhotoPicker sharePhotoPicker] setDidFinishPickingPhotosBlock:^(NSArray<UIImage *> *images, NSArray<XMNAssetModel *> *assets) {
@@ -136,13 +136,11 @@
         
         
         UICollectionViewLayout *layout = [XMNPhotoCollectionController photoCollectionViewLayoutWithWidth:self.view.bounds.size.width];
-        _collectionView = [[UICollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:layout];
+        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 64, self.view.bounds.size.width, self.view.bounds.size.height - 64) collectionViewLayout:layout];
         _collectionView.contentInset = UIEdgeInsetsMake(8, 8, 8, 8);
-        _collectionView.backgroundColor = [UIColor whiteColor];
         _collectionView.dataSource = self;
         _collectionView.delegate = self;
         [_collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"CollectionCell"];
-//        [_collectionView registerClass:[XMNAssetCell class] forCellWithReuseIdentifier:@"XMNAssetCell"];
         [_collectionView registerNib:[UINib nibWithNibName:@"XMNAssetCell" bundle:nil] forCellWithReuseIdentifier:@"XMNAssetCell"];
     }
     return _collectionView;

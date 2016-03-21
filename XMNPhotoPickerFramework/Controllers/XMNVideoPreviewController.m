@@ -108,7 +108,11 @@
 
 - (void)_setupBottomBar {
     XMNBottomBar *bottomBar = [[XMNBottomBar alloc] initWithBarType:XMNPreviewBottomBar];
-    [bottomBar setFrame:CGRectMake(0, self.view.frame.size.height - 50, self.view.frame.size.width, 50)];
+    if (iOS9Later) {
+        [bottomBar setFrame:CGRectMake(0, self.view.frame.size.height - 50, self.view.frame.size.width, 50)];
+    }else {
+        [bottomBar setFrame:CGRectMake(0, self.view.frame.size.height - 50 + 20, self.view.frame.size.width, 50)];
+    }
     __weak typeof(*&self) wSelf = self;
     self.selectedVideoEnable ? [bottomBar setConfirmBlock:^{
         __weak typeof(*&self) self = wSelf;
