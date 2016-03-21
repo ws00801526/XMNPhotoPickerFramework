@@ -121,9 +121,11 @@
     if ([result isKindOfClass:[PHFetchResult class]]) {
         for (PHAsset *asset in result) {
             XMNAssetType type = [self _assetTypeWithOriginType:asset.mediaType];
+#ifdef iOS9Later
             if (asset.mediaSubtypes == PHAssetMediaSubtypePhotoLive) {
                 type = XMNAssetTypeLivePhoto;
             }
+#endif
             NSString *timeLength = type == XMNAssetTypeVideo ? [NSString stringWithFormat:@"%0.0f",asset.duration] : @"";
             timeLength = [self _timeStringFromSeconds:[timeLength intValue]];
             [photoArr addObject:[XMNAssetModel modelWithAsset:asset type:type timeLength:timeLength]];
