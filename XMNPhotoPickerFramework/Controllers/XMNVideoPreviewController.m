@@ -29,6 +29,9 @@
 
 @property (nonatomic, strong) UIImage *coverImage;
 
+@property (nonatomic, weak)   NSLayoutConstraint *bottomBarShowConstraint;
+@property (nonatomic, weak)   NSLayoutConstraint *bottomBarHideConstraint;
+
 
 @end
 
@@ -90,6 +93,7 @@
             [self.view.layer addSublayer:playerLayer];
             [self _setupPlayButton];
             [self _setupBottomBar];
+            [self _setupConstraints];
             [self.view addSubview:self.topBar];
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_pausePlayer) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
         });
@@ -108,11 +112,6 @@
 
 - (void)_setupBottomBar {
     XMNBottomBar *bottomBar = [[XMNBottomBar alloc] initWithBarType:XMNPreviewBottomBar];
-    if (iOS9Later) {
-        [bottomBar setFrame:CGRectMake(0, self.view.frame.size.height - 50, self.view.frame.size.width, 50)];
-    }else {
-        [bottomBar setFrame:CGRectMake(0, self.view.frame.size.height - 50 + 20, self.view.frame.size.width, 50)];
-    }
     __weak typeof(*&self) wSelf = self;
     self.selectedVideoEnable ? [bottomBar setConfirmBlock:^{
         __weak typeof(*&self) self = wSelf;
@@ -151,6 +150,17 @@
 
 - (void)_handleBackAction {
     self.navigationController ? [self.navigationController popViewControllerAnimated:YES] : [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)_setupConstraints {
+    self.bottomBar.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.bottomBar attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:0.0f]];
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.bottomBar attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:1.0f constant:0.0f]];
+    
+    [self.view addConstraint:self.bottomBarShowConstraint = [NSLayoutConstraint constraintWithItem:self.bottomBar attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant:0.0f]];
+//    [self.view addConstraint:self.bottomBarHideConstraint = [NSLayoutConstraint constraintWithItem:self.bottomBar attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant:.0f]];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.bottomBar attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:50.0f]];
 }
 
 #pragma mark - Getters

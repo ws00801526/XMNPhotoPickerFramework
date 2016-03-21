@@ -74,6 +74,7 @@ static NSString * const kXMNPhotoPreviewIdentifier = @"XMNPhotoPreviewCell";
     [self.view addSubview:self.bottomBar];
     [self _updateTopBarStatus];
     [self.bottomBar updateBottomBarWithAssets:self.selectedAssets];
+    [self _setupConstraints];
 }
 
 - (void)_setupCollectionView {
@@ -85,6 +86,15 @@ static NSString * const kXMNPhotoPreviewIdentifier = @"XMNPhotoPreviewCell";
     self.collectionView.contentSize = CGSizeMake(self.view.frame.size.width * self.assets.count, self.view.frame.size.height);
     self.collectionView.pagingEnabled = YES;
     
+}
+
+- (void)_setupConstraints {
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.bottomBar attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:0.0f]];
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.bottomBar attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:1.0f constant:0.0f]];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.bottomBar attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant:0.0f]];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.bottomBar attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:50.0f]];
 }
 
 - (void)_handleBackAction {
@@ -197,11 +207,7 @@ static NSString * const kXMNPhotoPreviewIdentifier = @"XMNPhotoPreviewCell";
 - (XMNBottomBar *)bottomBar {
     if (!_bottomBar) {
         _bottomBar = [[XMNBottomBar alloc] initWithBarType:XMNPreviewBottomBar];
-        if (iOS9Later) {
-            _bottomBar.frame = CGRectMake(0, self.view.frame.size.height - 50, self.view.frame.size.width, 50);
-        }else {
-            _bottomBar.frame = CGRectMake(0, self.view.frame.size.height - 50 + 20, self.view.frame.size.width, 50);
-        }
+        _bottomBar.translatesAutoresizingMaskIntoConstraints = NO;
         [_bottomBar updateBottomBarWithAssets:self.selectedAssets];
         
         __weak typeof(*&self) wSelf = self;

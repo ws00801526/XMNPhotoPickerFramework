@@ -52,6 +52,7 @@ static NSString * const kXMNAssetCellIdentifier = @"XMNAssetCell";
     
     // 初始化collectionView的一些属性
     [self _setupCollectionView];
+    [self _setupConstraints];
     
     //从相册中获取所有的资源model
     __weak typeof(*&self) wSelf = self;
@@ -100,17 +101,23 @@ static NSString * const kXMNAssetCellIdentifier = @"XMNAssetCell";
     [self.collectionView registerNib:[UINib nibWithNibName:kXMNAssetCellIdentifier bundle:nil] forCellWithReuseIdentifier:kXMNAssetCellIdentifier];
     
     XMNBottomBar *bottomBar = [[XMNBottomBar alloc] initWithBarType:XMNCollectionBottomBar];
-    if (iOS9Later) {
-        bottomBar.frame = CGRectMake(0, self.view.frame.size.height - 50, self.view.frame.size.width, 50);
-    }else {
-        bottomBar.frame = CGRectMake(0, self.view.frame.size.height - 50 + 20, self.view.frame.size.width, 50);
-    }
+    bottomBar.translatesAutoresizingMaskIntoConstraints = NO;
+
     __weak typeof(*&self) wSelf = self;
     [bottomBar setConfirmBlock:^{
         __weak typeof(*&self) self = wSelf;
         [(XMNPhotoPickerController *)self.navigationController didFinishPickingPhoto:self.selectedAssets];
     }];
     [self.view addSubview:self.bottomBar = bottomBar];
+}
+
+- (void)_setupConstraints {
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.bottomBar attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:0.0f]];
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.bottomBar attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:1.0f constant:0.0f]];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.bottomBar attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant:0.0f]];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.bottomBar attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:50.0f]];
 }
 
 - (void)_handleCancelAction {
