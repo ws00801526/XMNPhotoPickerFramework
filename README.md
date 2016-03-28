@@ -21,13 +21,18 @@
 * 支持预览图片,预览视频
 
 ###3. 使用方法
+* . pods使用
+	pod 'XMNPhotoPickerFramework'
 
-1. 命令行下 `git clone https://github.com/ws00801526/XMNPhotoPickerFramework.git`
-2. 拖动`XMNPhotoPickerFramework` 到你的工程内
-3. 导入头文件`XMNPhotoPickerFramework.h` 即可
-4. 具体用法,请参考demo
+* . 直接引用
 
-####3.1 直接显示相册
+	1. 命令行下 `git clone https://github.com/ws00801526/	XMNPhotoPickerFramework.git`
+	2. 拖动`XMNPhotoPickerFramework` 到你的工程内
+	3. 导入头文件`XMNPhotoPickerFramework.h` 即可
+	4. 具体用法,请参考demo
+ 
+
+###3.1 直接显示相册
 
 ```
 - (void)_showPhotoPickerC {
