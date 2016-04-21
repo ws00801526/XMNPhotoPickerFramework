@@ -7,7 +7,13 @@
 
 ###相关bug修复
 
+#####V1.0.1
+1. 修复pods引用后没有找到xib文件
+
+#####V1.0.0
 1. 修复自定义导航栏导致底部bottomBar位置不正确问题	
+
+
 
 ###1. 预览
 ![](http://7xlt1j.com1.z0.glb.clouddn.com/XMNPhotoPickerKit-ShowController.gif)
