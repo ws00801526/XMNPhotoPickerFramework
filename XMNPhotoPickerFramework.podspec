@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "XMNPhotoPickerFramework"
-  s.version      = "1.0.0"
+  s.version      = "1.0.1"
   s.summary      = "模仿微信选择图片类库"
   s.description  = "选择图片"
   s.homepage     = "https://github.com/ws00801526/XMNPhotoPickerFramework"
@@ -11,5 +11,5 @@ Pod::Spec.new do |s|
   s.source_files = "XMNPhotoPickerFramework/**/*.{h,m}"
   s.ios.frameworks   = "UIKit", "Foundation"
   s.requires_arc = true
-  s.resources = ["XMNPhotoPickerFramework/PhotoPickerKit.xcassets"]
+  s.resources = ["XMNPhotoPickerFramework/PhotoPickerKit.xcassets","XMNPhotoPickerFramework/Views/*.xib"]
 end
