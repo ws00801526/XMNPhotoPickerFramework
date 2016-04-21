@@ -1,32 +1,35 @@
-##XMNPhotoPickerKit
+## XMNPhotoPickerKit
 > 一款图片,视频选择类库
 
 
 --------
 
 
-###相关bug修复
+### 相关bug修复
 
-#####V1.0.1
+##### V1.0.2
+1. 修复XMNPhotoPicker 选择最大数量提示不正确
+
+##### V1.0.1
 1. 修复pods引用后没有找到xib文件
 
-#####V1.0.0
+##### V1.0.0
 1. 修复自定义导航栏导致底部bottomBar位置不正确问题	
 
 
 
-###1. 预览
+### 1. 预览
 ![](http://7xlt1j.com1.z0.glb.clouddn.com/XMNPhotoPickerKit-ShowController.gif)
 ![](http://7xlt1j.com1.z0.glb.clouddn.com/XMNPhotoPickerKit-ShowPicker.gif)
 
-###2. 功能
+### 2. 功能
 * 一款图片,视频选择类库
 * 支持直接显示相册选择
 * 支持类似QQ方式Sheet选择
 * iOS8+支持动态监测PhotoLibrary变化
 * 支持预览图片,预览视频
 
-###3. 使用方法
+### 3. 使用方法
 * . pods使用
 	pod 'XMNPhotoPickerFramework'
 
@@ -38,7 +41,7 @@
 	4. 具体用法,请参考demo
  
 
-###3.1 直接显示相册
+### 3.1 直接显示相册
 
 ```
 - (void)_showPhotoPickerC {
@@ -86,7 +89,7 @@
 
 ```
 
-####3.2 显示XMNPhotoPicker
+#### 3.2 显示XMNPhotoPicker
 
 ```
 - (void)_showPhotoPicker {
@@ -109,7 +112,7 @@
 
 ```
 
-###4.相关类说明 : [传送门](https://github.com/ws00801526/XMNPhotoPickerFramework/blob/master/XMNPhotoPickerKit-照片选择-类说明.md)
+### 4.相关类说明 : [传送门](https://github.com/ws00801526/XMNPhotoPickerFramework/blob/master/XMNPhotoPickerKit-照片选择-类说明.md)
 
-###5. 感谢
+### 5. 感谢
 感谢 [GitHub:banchichen](https://github.com/banchichen/TZImagePickerController)

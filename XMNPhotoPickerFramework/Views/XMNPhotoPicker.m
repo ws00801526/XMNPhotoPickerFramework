@@ -275,7 +275,8 @@
                     return YES;
                 }
                 return NO;
-            }else if (self.selectedAssets.count > self.maxCount){
+                //修复能选择的最大数量提示不正确
+            }else if (self.selectedAssets.count >= self.maxCount){
                 [self.parentController showAlertWithMessage:[NSString stringWithFormat:@"一次最多只能选择%d张图片",(int)self.maxCount]];
                 return NO;
             }

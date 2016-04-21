@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "XMNPhotoPickerFramework"
-  s.version      = "1.0.1"
+  s.version      = "1.0.2"
   s.summary      = "模仿微信选择图片类库"
   s.description  = "选择图片"
   s.homepage     = "https://github.com/ws00801526/XMNPhotoPickerFramework"

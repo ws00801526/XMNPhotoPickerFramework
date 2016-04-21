@@ -114,6 +114,7 @@
 - (IBAction)_handlePickerAction {
     //1. 推荐使用XMNPhotoPicker 的单例
     //2. 设置选择完照片的block回调
+    [XMNPhotoPicker sharePhotoPicker].maxCount = 2;
     [[XMNPhotoPicker sharePhotoPicker] setDidFinishPickingPhotosBlock:^(NSArray<UIImage *> *images, NSArray<XMNAssetModel *> *assets) {
         NSLog(@"picker images :%@ \n\n assets:%@",images,assets);
         self.assets = [assets copy];
