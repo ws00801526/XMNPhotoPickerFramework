@@ -33,7 +33,7 @@ typedef enum : NSUInteger {
 /** 获取照片asset对应的缩略图, 默认缩略图大小 80x80 */
 @property (nonatomic, strong, readonly, getter=thumbnail, nullable) UIImage *thumbnail;
 /** 获取照片asset的预览图,默认大小 [UIScreen mainScreen].bounds.size */
-@property (nonatomic, strong, readonly, nullable) UIImage * previewImage;
+@property (nonatomic, strong, nullable) UIImage * previewImage;
 /** 获取照片的方向 */
 @property (nonatomic, assign, readonly) UIImageOrientation imageOrientation;
 /** 图片的相关信息 */
@@ -49,7 +49,6 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong, readonly, nullable) AVPlayerItem * playerItem;
 /** 视频播放item的信息 */
 @property (nonatomic, copy,   readonly, nullable) NSDictionary * playerItemInfo;
-
 
 /** 是否被选中  默认NO */
 @property (nonatomic, assign) BOOL selected;

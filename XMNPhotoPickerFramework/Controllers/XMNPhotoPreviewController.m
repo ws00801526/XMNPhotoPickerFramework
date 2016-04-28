@@ -116,7 +116,7 @@ static NSString * const kXMNPhotoPreviewIdentifier = @"XMNPhotoPreviewCell";
             [UIView animationWithLayer:self.stateButton.layer type:XMNAnimationTypeBigger];
         }else {
             //TODO 超过最大数量
-            [self showAlertWithMessage:[NSString stringWithFormat:@"最多只能选择%ld张照片",self.maxCount]];
+            [self showAlertWithMessage:[NSString stringWithFormat:@"最多只能选择%ld张照片",(unsigned long)self.maxCount]];
         }
     }
     [self.bottomBar updateBottomBarWithAssets:self.selectedAssets];
@@ -173,6 +173,23 @@ static NSString * const kXMNPhotoPreviewIdentifier = @"XMNPhotoPreviewCell";
     return previewCell;
 }
 
+
+/// ========================================
+/// @name   重写了collection的两个代理方法,通过预加载
+/// 释放 previewImage 来节约内存
+/// ========================================
+
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    XMNAssetModel *model = self.assets[indexPath.row];
+    model.previewImage = nil;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    XMNAssetModel *model = self.assets[indexPath.row];
+    [model previewImage];
+}
 
 #pragma mark - Getters
 

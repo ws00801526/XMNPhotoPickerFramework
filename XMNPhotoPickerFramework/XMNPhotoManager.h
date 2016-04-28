@@ -35,6 +35,8 @@
  */
 - (BOOL)hasAuthorized;
 
+- (NSUInteger)authorizationStatus;
+
 /// ========================================
 /// @name   获取Album相册相关方法
 /// ========================================

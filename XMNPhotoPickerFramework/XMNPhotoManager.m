@@ -39,6 +39,15 @@
     }
 }
 
+- (NSUInteger)authorizationStatus {
+    
+    if (iOS8Later) {
+        return [PHPhotoLibrary authorizationStatus];
+    }else {
+        return [ALAssetsLibrary authorizationStatus];
+    }
+}
+
 
 /// ========================================
 /// @name   获取Album相册相关方法
@@ -52,9 +61,9 @@
  */
 - (void)getAlbumsPickingVideoEnable:(BOOL)pickingVideoEnable
                     completionBlock:(void(^_Nonnull)(NSArray<XMNAlbumModel *> * _Nullable albums))completionBlock {
+    
     NSMutableArray *albumArr = [NSMutableArray array];
     if (iOS8Later) {
-        
         PHFetchOptions *option = [[PHFetchOptions alloc] init];
         if (!pickingVideoEnable) option.predicate = [NSPredicate predicateWithFormat:@"mediaType == %ld", PHAssetMediaTypeImage];
         option.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:YES]];
@@ -64,17 +73,19 @@
             smartAlbumSubtype = PHAssetCollectionSubtypeSmartAlbumUserLibrary | PHAssetCollectionSubtypeSmartAlbumRecentlyAdded | PHAssetCollectionSubtypeSmartAlbumScreenshots | PHAssetCollectionSubtypeSmartAlbumSelfPortraits | PHAssetCollectionSubtypeSmartAlbumVideos;
         }
         PHFetchResult *smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:smartAlbumSubtype options:nil];
-        for (PHAssetCollection *collection in smartAlbums) {
-            PHFetchResult *fetchResult = [PHAsset fetchAssetsInAssetCollection:collection options:option];
-            if (fetchResult.count < 1) continue;
-            if ([collection.localizedTitle containsString:@"Deleted"]) continue;
+        
+        [smartAlbums enumerateObjectsUsingBlock:^(PHAssetCollection *collection  , NSUInteger idx, BOOL * _Nonnull stop) {
             
-            if ([collection.localizedTitle isEqualToString:@"Camera Roll"]) {
-                [albumArr insertObject:[XMNAlbumModel albumWithResult:fetchResult name:collection.localizedTitle] atIndex:0];
-            } else {
-                [albumArr addObject:[XMNAlbumModel albumWithResult:fetchResult name:collection.localizedTitle]];
+            PHFetchResult *fetchResult = [PHAsset fetchAssetsInAssetCollection:collection options:option];
+            if (fetchResult.count > 0 && ![[collection.localizedTitle lowercaseString] containsString:@"delegate"]) {
+                if ([collection.localizedTitle isEqualToString:@"Camera Roll"]) {
+                    [albumArr insertObject:[XMNAlbumModel albumWithResult:[fetchResult copy] name:[collection.localizedTitle copy]] atIndex:0];
+                } else {
+                    [albumArr addObject:[XMNAlbumModel albumWithResult:[fetchResult copy] name:[collection.localizedTitle copy]]];
+                }
             }
-        }
+        }];
+        
         PHFetchResult *albums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeAlbumRegular | PHAssetCollectionSubtypeAlbumSyncedAlbum options:nil];
         for (PHAssetCollection *collection in albums) {
             PHFetchResult *fetchResult = [PHAsset fetchAssetsInAssetCollection:collection options:option];

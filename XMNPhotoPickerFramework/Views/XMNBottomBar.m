@@ -57,7 +57,7 @@
         self.originStateImageView.highlighted = self.selectOriginEnable;
     }
     
-    self.numberLabel.text = [NSString stringWithFormat:@"%ld",assets.count];
+    self.numberLabel.text = [NSString stringWithFormat:@"%ld",(unsigned long)assets.count];
     
     self.numberImageView.hidden = self.numberLabel.hidden = assets.count <= 0;
     self.confirmButton.enabled = assets.count >= 1;

@@ -67,7 +67,7 @@
 #pragma mark - Getters
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"\n-----album desc start--\nalbum :%@ have %ld photos \nresult :%@\n-----album desc end----",self.name,self.count,self.fetchResult];
+    return [NSString stringWithFormat:@"\n-----album desc start--\nalbum :%@ have %ld photos \nresult :%@\n-----album desc end----",self.name,(unsigned long)self.count,self.fetchResult];
 }
 
 

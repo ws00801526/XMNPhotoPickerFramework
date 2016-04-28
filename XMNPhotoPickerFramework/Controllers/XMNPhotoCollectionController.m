@@ -152,7 +152,7 @@ static NSString * const kXMNAssetCellIdentifier = @"XMNAssetCell";
                 [self showAlertWithMessage:@"同时选择视频和图片,视频将作为图片发送"];
                 return YES;
             }else if (self.selectedAssets.count >= photoPickerC.maxCount) {
-                [self showAlertWithMessage:[NSString stringWithFormat:@"最多只能选择%ld张照片",photoPickerC.maxCount]];
+                [self showAlertWithMessage:[NSString stringWithFormat:@"最多只能选择%ld张照片",(unsigned long)photoPickerC.maxCount]];
                 return NO;
             }
             return YES;
@@ -194,13 +194,12 @@ static NSString * const kXMNAssetCellIdentifier = @"XMNAssetCell";
     }else {
         XMNPhotoPreviewController *previewC = [[XMNPhotoPreviewController alloc] initWithCollectionViewLayout:[XMNPhotoPreviewController photoPreviewViewLayoutWithSize:[UIScreen mainScreen].bounds.size]];
         previewC.assets = self.assets;
-        previewC.selectedAssets = [NSMutableArray arrayWithArray:self.selectedAssets];
+        previewC.selectedAssets = self.selectedAssets;
         previewC.currentIndex = indexPath.row;
         previewC.maxCount = [(XMNPhotoPickerController *)self.navigationController maxCount];
         __weak typeof(*&self) wSelf = self;
         [previewC setDidFinishPreviewBlock:^(NSArray<XMNAssetModel *> *selectedAssets) {
             __weak typeof(*&self) self = wSelf;
-            self.selectedAssets = [NSMutableArray arrayWithArray:selectedAssets];
             [self.bottomBar updateBottomBarWithAssets:self.selectedAssets];
             [self.collectionView reloadData];
         }];
@@ -215,7 +214,6 @@ static NSString * const kXMNAssetCellIdentifier = @"XMNAssetCell";
     
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
 }
-
 
 #pragma mark - Getters
 

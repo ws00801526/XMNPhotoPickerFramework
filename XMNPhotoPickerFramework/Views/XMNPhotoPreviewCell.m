@@ -34,7 +34,6 @@
     [self.scrollView setZoomScale:1.0f];
     self.imageView.image = item.previewImage;
     [self _resizeSubviews];
-    
 }
 
 - (void)_setup {
