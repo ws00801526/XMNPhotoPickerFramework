@@ -15,9 +15,69 @@
 
 #import "XMNPhotoManager.h"
 #import "XMNPhotoPickerDefines.h"
+#import "XMNPhotoStickLayout.h"
 
 #import "UIView+Animations.h"
 #import "UIViewController+XMNPhotoHUD.h"
+
+
+
+
+
+@interface XMNPhotoPickerCell : UICollectionViewCell;
+
+@property (nonatomic, weak)   UIImageView *imageView;
+
+
+@end
+
+@implementation XMNPhotoPickerCell
+
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    
+    if (self = [super initWithFrame:frame]) {
+        NSLog(@"photopicker cell");
+        UIImageView *imageView = [[UIImageView alloc] init];
+        [self.contentView addSubview:self.imageView = imageView];
+    }
+    return self;
+}
+
+- (void)layoutSubviews {
+    
+    [super layoutSubviews];
+    self.imageView.frame = self.contentView.bounds;
+}
+
+@end
+
+@interface XMNPhotoPickerReusableView : UICollectionReusableView
+
+@property (nonatomic, weak)   UIButton *button;
+
+@end
+
+
+@implementation XMNPhotoPickerReusableView
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    
+    if (self = [super initWithFrame:frame]) {
+        
+        NSLog(@"XMNPhotoPickerReusableView");
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        [button setImage:[UIImage imageNamed:@"photo_state_normal"] forState:UIControlStateNormal];
+        [button setImage:[UIImage imageNamed:@"photo_state_selected"] forState:UIControlStateSelected];
+        [button sizeToFit];
+        [self addSubview:self.button = button];
+    }
+    return self;
+}
+
+@end
+
+
 
 @interface XMNPhotoPicker   () <UICollectionViewDelegate,UICollectionViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate,PHPhotoLibraryChangeObserver>
 
@@ -54,7 +114,7 @@
     NSArray *array = [[NSBundle mainBundle] loadNibNamed:@"XMNPhotoPicker" owner:nil options:nil];
     if ((self = (XMNPhotoPicker *)[array firstObject])) {
         self.frame = [UIScreen mainScreen].bounds;
-        [self _setup];
+        [self setup];
         self.maxCount = maxCount ? : self.maxCount;
     }
     return self;
@@ -67,6 +127,8 @@
 #pragma mark - Methods
 
 - (void)showAnimated:(BOOL)animated {
+    
+    self.selectedAssets ? [self.selectedAssets removeAllObjects] : nil;
     [self.parentController.view addSubview:self];
     if (animated) {
         CGPoint fromPoint = CGPointMake(self.frame.size.width/2, self.contentViewHeight/2 + self.frame.size.height);
@@ -74,9 +136,11 @@
         CABasicAnimation *positionAnim = [UIView animationWithFromValue:[NSValue valueWithCGPoint:fromPoint] toValue:[NSValue valueWithCGPoint:toPoint] duration:.2f forKeypath:@"position"];
         [self.contentView.layer addAnimation:positionAnim forKey:nil];
     }
+    [self.collectionView reloadData];
 }
 
 - (void)hideAnimated:(BOOL)animated {
+    
     if (animated) {
         CGPoint fromPoint   = CGPointMake(self.frame.size.width/2, self.frame.size.height - self.contentViewHeight/2);
         CGPoint toPoint = CGPointMake(self.frame.size.width/2, self.contentViewHeight/2 + self.frame.size.height);
@@ -91,16 +155,16 @@
 - (void)showPhotoPickerwithController:(UIViewController *)controller animated:(BOOL)animated {
     [self.selectedAssets removeAllObjects];
     [self.assets makeObjectsPerformSelector:@selector(setSelected:) withObject:@(NO)];
-    [self _updatePhotoLibraryButton];
+    [self updatePhotoLibraryButton];
     [self.collectionView setContentOffset:CGPointZero];
     [self.collectionView reloadData];
     self.hidden = NO;
     self.parentController = controller;
-    self.assets ? nil : [self _loadAssets];
+    self.assets ? nil : [self loadAssets];
     [self showAnimated:animated];
 }
 
-- (void)_setup {
+- (void)setup {
     
     self.maxPreviewCount = 20;
     self.maxCount = MIN(self.maxPreviewCount, NSUIntegerMax);
@@ -108,7 +172,7 @@
     UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
     cancelButton.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - self.contentViewHeight);
     cancelButton.tag = kXMNCancel;
-    [cancelButton addTarget:self action:@selector(_handleButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [cancelButton addTarget:self action:@selector(handleButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:cancelButton];
     
     iOS8Later ? [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self] : nil;
@@ -122,25 +186,28 @@
         self.cameraLineView.hidden = YES;
         self.cameraButtonHConstarint.constant = 0;
     }
-        
-    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-    layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    layout.minimumInteritemSpacing = kXMNMargin;
-    layout.sectionInset = UIEdgeInsetsMake(0, 5, 0, 5);
-
+    
+    XMNPhotoStickLayout *stickLayout = [[XMNPhotoStickLayout alloc] init];
+    stickLayout.headerReferenceSize = CGSizeMake(30, 30);
+    stickLayout.minimumLineSpacing = 5.0f;
+    stickLayout.sectionInset = UIEdgeInsetsMake(0, 5, 0, 5);
+    
     [self.collectionView registerNib:[UINib nibWithNibName:@"XMNAssetCell" bundle:nil] forCellWithReuseIdentifier:@"XMNAssetCell"];
-    self.collectionView.collectionViewLayout = layout;
+    self.collectionView.collectionViewLayout = stickLayout;
     self.collectionView.backgroundColor = [UIColor whiteColor];
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
     self.collectionView.showsHorizontalScrollIndicator = NO;
     
+    [self.collectionView registerClass:[XMNPhotoPickerCell class] forCellWithReuseIdentifier:@"XMNPhotoPickerCell"];
+    [self.collectionView registerClass:[XMNPhotoPickerReusableView class] forSupplementaryViewOfKind:kXMNStickSupplementaryViewKind withReuseIdentifier:@"XMNPhotoPickerReusableView"];
+    
     self.selectedAssets = [NSMutableArray array];
     
-    self.assets ? nil : [self _loadAssets];
+    self.assets ? nil : [self loadAssets];
 }
 
-- (void)_loadAssets {
+- (void)loadAssets {
     
     __weak typeof(*&self) wSelf = self;
     self.loadingView.hidden = NO;
@@ -155,7 +222,7 @@
                     [assets enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(XMNAssetModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                         __weak typeof(*&self) self = wSelf;
                         [tempAssets addObject:obj];
-                        *stop = ( tempAssets.count > self.maxPreviewCount);
+                        *stop = (tempAssets.count > self.maxPreviewCount);
                     }];
                     self.assets = [NSArray arrayWithArray:tempAssets];
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -163,15 +230,15 @@
                         self.loadingView.hidden = YES;
                         [self.loadingView stopAnimating];
                         [self.collectionView reloadData];
+                        [(XMNPhotoStickLayout *)self.collectionView.collectionViewLayout updateAllAttributes];
                     });
                 }];
             }
         }];
     });
-    
 }
 
-- (IBAction)_handleButtonAction:(UIButton *)sender {
+- (IBAction)handleButtonAction:(UIButton *)sender {
     switch (sender.tag) {
         case kXMNCancel:
             [self hideAnimated:YES];
@@ -193,12 +260,12 @@
             break;
         case kXMNCamera:
         {
-            [self _showImageCameraController];
+            [self showImageCameraController];
         }
             break;
         case kXMNPhotoLibrary:
         {
-            [self _showPhotoPickerController];
+            [self showPhotoPickerController];
         }
             break;
         default:
@@ -206,7 +273,8 @@
     }
 }
 
-- (void)_updatePhotoLibraryButton {
+- (void)updatePhotoLibraryButton {
+    
     if (self.selectedAssets.count == 0) {
         self.photoLibraryButton.tag = kXMNPhotoLibrary;
         [self.photoLibraryButton setTitle:[NSString stringWithFormat:@"相册"] forState:UIControlStateNormal];
@@ -218,7 +286,7 @@
     }
 }
 
-- (void)_showPhotoPickerController {
+- (void)showPhotoPickerController {
     XMNPhotoPickerController *photoPickerController = [[XMNPhotoPickerController alloc] initWithMaxCount:self.maxCount delegate:nil];
     __weak typeof(*&self) wSelf = self;
     [photoPickerController setDidFinishPickingPhotosBlock:^(NSArray<UIImage *> *images, NSArray<XMNAssetModel *> *assets) {
@@ -236,7 +304,8 @@
     [self.parentController presentViewController:photoPickerController animated:YES completion:nil];
 }
 
-- (void)_showImageCameraController {
+- (void)showImageCameraController {
+    
     UIImagePickerController *imagePickerC = [[UIImagePickerController alloc] init];
     imagePickerC.delegate = self;
     imagePickerC.allowsEditing = NO;
@@ -244,6 +313,39 @@
     imagePickerC.sourceType = UIImagePickerControllerSourceTypeCamera;
     [self.parentController presentViewController:imagePickerC animated:YES completion:nil];
 }
+
+
+- (void)handleStateButtonAction:(UIButton *)button {
+    
+    XMNAssetModel *assetModel = self.assets[button.tag];
+    if (!assetModel.selected) {
+        if (assetModel.type == XMNAssetTypeVideo) {
+            if ([self.selectedAssets firstObject] && [self.selectedAssets firstObject].type != XMNAssetTypeVideo) {
+                [self.parentController showAlertWithMessage:@"不能同时选择照片和视频"];
+            }else if ([self.selectedAssets firstObject]){
+                [self.parentController showAlertWithMessage:@"一次只能发送1个视频"];
+            }
+            return;
+        }else if (self.selectedAssets.count >= self.maxCount) {
+            [self.parentController showAlertWithMessage:[NSString stringWithFormat:@"一次最多只能选择%d张图片",(int)self.maxCount]];
+            return;
+        }
+        [UIView animationWithLayer:button.layer type:XMNAnimationTypeBigger];
+        assetModel.selected = YES;
+        [self.selectedAssets addObject:assetModel];
+    }else {
+        
+        assetModel.selected = NO;
+        [self.selectedAssets removeObject:assetModel];
+    }
+    button.selected = assetModel.selected;
+    [self updatePhotoLibraryButton];
+    NSIndexPath *nextIndexPath = [NSIndexPath indexPathForRow:MIN(self.assets.count - 1, button.tag+1) inSection:0];
+    if (![self.collectionView.indexPathsForVisibleItems containsObject:nextIndexPath]) {
+        [self.collectionView scrollToItemAtIndexPath:nextIndexPath atScrollPosition:UICollectionViewScrollPositionRight animated:YES];
+    }
+}
+
 
 #pragma mark - UICollectionViewDelegate & UICollectionViewDataSource
 
@@ -257,61 +359,15 @@
 
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    XMNAssetCell *assetCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"XMNAssetCell" forIndexPath:indexPath];
-    assetCell.backgroundColor = [UIColor lightGrayColor];
-    [assetCell configPreviewCellWithItem:self.assets[indexPath.row]];
     
-    __weak typeof(*&self) wSelf = self;
-    // 设置assetCell willChangeBlock
-    [assetCell setWillChangeSelectedStateBlock:^BOOL(XMNAssetModel *asset) {
-        if (!asset.selected) {
-            __weak typeof(*&self) self = wSelf;
-            if (asset.type == XMNAssetTypeVideo) {
-                if ([self.selectedAssets firstObject] && [self.selectedAssets firstObject].type != XMNAssetTypeVideo) {
-                    [self.parentController showAlertWithMessage:@"不能同时选择照片和视频"];
-                }else if ([self.selectedAssets firstObject]){
-                    [self.parentController showAlertWithMessage:@"一次只能发送1个视频"];
-                }else {
-                    return YES;
-                }
-                return NO;
-                //修复能选择的最大数量提示不正确
-            }else if (self.selectedAssets.count >= self.maxCount){
-                [self.parentController showAlertWithMessage:[NSString stringWithFormat:@"一次最多只能选择%d张图片",(int)self.maxCount]];
-                return NO;
-            }
-            return YES;
-        }else {
-            return NO;
-        }
-    }];
-    
-    // 设置assetCell didChangeBlock
-    [assetCell setDidChangeSelectedStateBlock:^(BOOL selected, XMNAssetModel *asset) {
-        __weak typeof(*&self) self = wSelf;
-        if (selected) {
-            [self.selectedAssets containsObject:asset] ? nil : [self.selectedAssets addObject:asset];
-            asset.selected = YES;
-        }else {
-            [self.selectedAssets containsObject:asset] ? [self.selectedAssets removeObject:asset] : nil;
-            asset.selected = NO;
-        }
-        [self _updatePhotoLibraryButton];
-    }];
-    
-    [assetCell setDidSendAsset:^(XMNAssetModel *asset, CGRect frame) {
-        if (asset.type == XMNAssetTypePhoto) {
-            self.didFinishPickingPhotosBlock ? self.didFinishPickingPhotosBlock(@[asset.previewImage],@[asset]) : nil;
-        }else {
-            self.didFinishPickingVideoBlock ? self.didFinishPickingVideoBlock(asset.previewImage , asset) : nil;
-        }
-    }];
-    
-    return assetCell;
+    XMNPhotoPickerCell *pickerCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"XMNPhotoPickerCell" forIndexPath:indexPath];
+    pickerCell.imageView.image = self.assets[indexPath.row].previewImage;
+    return pickerCell;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     XMNAssetModel *asset = self.assets[indexPath.row];
     CGSize size = asset.previewImage.size;
     CGFloat scale = (size.width - 10)/size.height;
@@ -319,6 +375,7 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    
     XMNAssetModel *assetModel = self.assets[indexPath.row];
     if (assetModel.type == XMNAssetTypeVideo) {
         XMNVideoPreviewController *videoPreviewC = [[XMNVideoPreviewController alloc] init];
@@ -342,12 +399,13 @@
         [previewC setDidFinishPreviewBlock:^(NSArray<XMNAssetModel *> *selectedAssets) {
             __weak typeof(*&self) self = wSelf;
             self.selectedAssets = [NSMutableArray arrayWithArray:selectedAssets];
-            [self _updatePhotoLibraryButton];
+            [self updatePhotoLibraryButton];
             [self.collectionView reloadData];
             [self.parentController dismissViewControllerAnimated:YES completion:nil];
         }];
         
         [previewC setDidFinishPickingBlock:^(NSArray<UIImage *> *images, NSArray<XMNAssetModel *> *assets) {
+            
             __weak typeof(*&self) self = wSelf;
             [self.selectedAssets removeAllObjects];
             self.didFinishPickingPhotosBlock ? self.didFinishPickingPhotosBlock(images,assets) : nil;
@@ -361,9 +419,20 @@
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
 }
 
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    
+    XMNPhotoPickerReusableView *reusableView = [collectionView dequeueReusableSupplementaryViewOfKind:kXMNStickSupplementaryViewKind withReuseIdentifier:@"XMNPhotoPickerReusableView" forIndexPath:indexPath];
+    reusableView.button.selected = self.assets[indexPath.row].selected;
+    reusableView.button.tag = indexPath.row;
+    [reusableView.button removeTarget:self action:@selector(handleStateButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [reusableView.button addTarget:self action:@selector(handleStateButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    return reusableView;
+}
+
 #pragma mark - CAAnimationDelegate
 
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
+    
     self.hidden = YES;
     [self removeFromSuperview];
 }
@@ -432,6 +501,7 @@
 #pragma mark - Getters
 
 - (CGFloat)contentViewHeight {
+    
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
         return 41 * 3 + 160 + 8;
     }else {

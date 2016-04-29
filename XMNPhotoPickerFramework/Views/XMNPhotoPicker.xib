@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -23,7 +23,7 @@
                                 <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             </state>
                             <connections>
-                                <action selector="_handleButtonAction:" destination="qDL-qo-4Li" eventType="touchUpInside" id="TgN-WH-PS0"/>
+                                <action selector="handleButtonAction:" destination="qDL-qo-4Li" eventType="touchUpInside" id="YMQ-0t-fVg"/>
                             </connections>
                         </button>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fty-Uk-lst">
@@ -42,7 +42,7 @@
                                 <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             </state>
                             <connections>
-                                <action selector="_handleButtonAction:" destination="qDL-qo-4Li" eventType="touchUpInside" id="ILU-d2-SH4"/>
+                                <action selector="handleButtonAction:" destination="qDL-qo-4Li" eventType="touchUpInside" id="ymi-iA-sQN"/>
                             </connections>
                         </button>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ye5-EV-6h0">
@@ -59,24 +59,12 @@
                                 <constraint firstAttribute="height" constant="1" id="8eg-0h-lt7"/>
                             </constraints>
                         </view>
-                        <button opaque="NO" tag="2" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HgV-hO-MOg">
-                            <rect key="frame" x="0.0" y="168" width="320" height="40"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="40" id="dZe-sc-KIz"/>
-                            </constraints>
-                            <state key="normal" title="相册">
-                                <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                            </state>
-                            <connections>
-                                <action selector="_handleButtonAction:" destination="qDL-qo-4Li" eventType="touchUpInside" id="Zdi-LA-KPu"/>
-                            </connections>
-                        </button>
-                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="z83-Dt-V1n">
+                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="z83-Dt-V1n">
                             <rect key="frame" x="0.0" y="4" width="320" height="160"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="160" id="i6l-eA-IuK"/>
                             </constraints>
-                            <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="F86-CE-BLr">
+                            <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="hUb-Np-ClG">
                                 <size key="itemSize" width="50" height="50"/>
                                 <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                 <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -86,6 +74,18 @@
                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="PX4-OR-Qhv">
                             <rect key="frame" x="150" y="74" width="20" height="20"/>
                         </activityIndicatorView>
+                        <button opaque="NO" tag="2" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HgV-hO-MOg">
+                            <rect key="frame" x="0.0" y="168" width="320" height="40"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="40" id="dZe-sc-KIz"/>
+                            </constraints>
+                            <state key="normal" title="相册">
+                                <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="handleButtonAction:" destination="qDL-qo-4Li" eventType="touchUpInside" id="YYw-4K-gO2"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>

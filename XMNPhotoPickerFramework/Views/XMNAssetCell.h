@@ -11,6 +11,8 @@
 @class XMNAssetModel;
 @interface XMNAssetCell : UICollectionViewCell
 
+@property (weak, nonatomic, nullable) IBOutlet UIButton *photoStateButton;
+
 /**
  *  按钮点击后的回调
  *  返回按钮的状态是否会被更改
@@ -36,12 +38,5 @@
  *  @param item 具体的AssetModel
  */
 - (void)configCellWithItem:(XMNAssetModel * _Nonnull )item;
-
-/**
- *  XMNPhotoPicker 中配置collectionView的cell
- *
- *  @param item 具体的AssetModel
- */
-- (void)configPreviewCellWithItem:(XMNAssetModel * _Nonnull )item;
 
 @end
