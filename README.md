@@ -7,6 +7,11 @@
 
 ### 相关bug修复
 
+##### V1.0.3
+1. 修复了首次提示授权选择后 页面不更新问题
+2. 去除了拖动发送功能
+3. 增加了类似QQ的选择stick功能
+
 ##### V1.0.2
 1. 修复XMNPhotoPicker 选择最大数量提示不正确
 
@@ -17,8 +22,9 @@
 1. 修复自定义导航栏导致底部bottomBar位置不正确问题	
 
 
-
 ### 1. 预览
+![最新V1.0.3版本](http://7xlt1j.com1.z0.glb.clouddn.com/XMNPhotoPickerFramework.gif)
+
 ![](http://7xlt1j.com1.z0.glb.clouddn.com/XMNPhotoPickerKit-ShowController.gif)
 ![](http://7xlt1j.com1.z0.glb.clouddn.com/XMNPhotoPickerKit-ShowPicker.gif)
 
