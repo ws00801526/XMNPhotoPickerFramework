@@ -15,11 +15,6 @@
 
 @interface XMNPhotoPickerController ()
 
-@property (nonatomic, strong) dispatch_source_t timer;
-
-@property (nonatomic, weak)   UILabel *tipsLabel;
-
-
 @end
 
 @implementation XMNPhotoPickerController
@@ -29,7 +24,9 @@
 
 #pragma mark - XMNPhotoPickerController Life Cycle
 
-- (instancetype)initWithMaxCount:(NSUInteger)maxCount delegate:(id<XMNPhotoPickerControllerDelegate>)delegate {
+- (instancetype)initWithMaxCount:(NSUInteger)maxCount
+                        delegate:(id<XMNPhotoPickerControllerDelegate>)delegate {
+    
     XMNAlbumListController *albumListC = [[XMNAlbumListController alloc] init];
     if (self = [super initWithRootViewController:albumListC]) {
         _photoPickerDelegate = delegate;
@@ -43,8 +40,8 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
-    [self _setupNavigationBarAppearance];
-    [self _setupUnAuthorizedTips];
+    [self setupNavigationBarAppearance];
+    
 }
 
 /**
@@ -54,6 +51,41 @@
  */
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self handleAuthorized];
+}
+
+- (void)dealloc {
+    NSLog(@"photo picker dealloc");
+}
+
+#pragma mark - XMNPhotoPickerController Methods
+
+- (void)handleAuthorized {
+    
+    if ([XMNPhotoManager sharedManager].authorizationStatus == PHAuthorizationStatusNotDetermined) {
+        //未决定是否授权 -> 启动定时器
+        [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+            
+        }];
+        [self performSelector:@selector(handleAuthorized) withObject:nil afterDelay:.3];
+        return;
+    }
+    
+    if ([[XMNPhotoManager sharedManager] hasAuthorized]) {
+        //已授权
+        [self autoPushPhotoCollectionViewController];
+    }else {
+        //未授权
+        [self showUnAuthorizedTips];
+    }
+    
+}
+
+/**
+ *  自动前往照片列表页面
+ */
+- (void)autoPushPhotoCollectionViewController {
+    
     if (self.autoPushToPhotoCollection) {
         XMNPhotoCollectionController *photoCollectionC = [[XMNPhotoCollectionController alloc] initWithCollectionViewLayout:[XMNPhotoCollectionController photoCollectionViewLayoutWithWidth:self.view.frame.size.width]];
         __weak typeof(*&self) wSelf = self;
@@ -64,12 +96,6 @@
         }];
     }
 }
-
-- (void)dealloc {
-    NSLog(@"photo picker dealloc");
-}
-
-#pragma mark - XMNPhotoPickerController Methods
 
 /**
  *  call photoPickerDelegate & didFinishPickingPhotosBlock
@@ -103,67 +129,33 @@
     self.didCancelPickingBlock ? self.didCancelPickingBlock() : nil;
 }
 
+/**
+ *  显示用户拒绝授权提示
+ */
 - (void)showUnAuthorizedTips {
     
-    if (![[XMNPhotoManager sharedManager] hasAuthorized] && !self.tipsLabel) {
-
-        UILabel *tipsLabel = [[UILabel alloc] init];
-        tipsLabel.frame = CGRectMake(8, 64, self.view.frame.size.width - 16, 300);
-        tipsLabel.textAlignment = NSTextAlignmentCenter;
-        tipsLabel.numberOfLines = 0;
-        tipsLabel.font = [UIFont systemFontOfSize:16];
-        tipsLabel.textColor = [UIColor blackColor];
-        tipsLabel.userInteractionEnabled = YES;
-        NSString *appName = [[NSBundle mainBundle].infoDictionary valueForKey:@"CFBundleDisplayName"];
-        if (!appName) appName = [[NSBundle mainBundle].infoDictionary valueForKey:@"CFBundleName"];
-        tipsLabel.text = [NSString stringWithFormat:@"请在%@的\"设置-隐私-照片\"选项中，\r允许%@访问你的手机相册。",[UIDevice currentDevice].model,appName];
-        [self.view addSubview:self.tipsLabel = tipsLabel];
-        
-        //!!! bug 用户前往设置后,修改授权会导致app崩溃
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_handleTipsTap)];
-        [tipsLabel addGestureRecognizer:tap];
-        
-        self.timer ? dispatch_source_cancel(self.timer) : nil;
-    }
+    UILabel *tipsLabel = [[UILabel alloc] init];
+    tipsLabel.frame = CGRectMake(8, 64, self.view.frame.size.width - 16, 300);
+    tipsLabel.textAlignment = NSTextAlignmentCenter;
+    tipsLabel.numberOfLines = 0;
+    tipsLabel.font = [UIFont systemFontOfSize:16];
+    tipsLabel.textColor = [UIColor blackColor];
+    tipsLabel.userInteractionEnabled = YES;
+    NSString *appName = [[NSBundle mainBundle].infoDictionary valueForKey:@"CFBundleDisplayName"];
+    if (!appName) appName = [[NSBundle mainBundle].infoDictionary valueForKey:@"CFBundleName"];
+    tipsLabel.text = [NSString stringWithFormat:@"请在%@的\"设置-隐私-照片\"选项中，\r允许%@访问你的手机相册。",[UIDevice currentDevice].model,appName];
+    [self.view addSubview:tipsLabel];
     
-    if ([[XMNPhotoManager sharedManager] authorizationStatus] == 0) {
-        self.timer ? dispatch_source_cancel(self.timer) : nil;
-        self.tipsLabel ? [self.tipsLabel removeFromSuperview] : nil;
-    }
+    //!!! bug 用户前往设置后,修改授权会导致app崩溃
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTipsTapAction)];
+    [tipsLabel addGestureRecognizer:tap];
 }
 
-/**
- *  设置当用户未授权访问照片时提示
- */
-- (void)_setupUnAuthorizedTips {
-    
-    //未决定是否授权
-    if ([[XMNPhotoManager sharedManager] authorizationStatus] == 0) {
-
-        [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
-            
-        }];
-        __weak typeof(*&self) wSelf = self;
-        self.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_global_queue(0, 0));
-        dispatch_source_set_timer(self.timer, DISPATCH_TIME_NOW, .5 * NSEC_PER_SEC, DISPATCH_TIME_FOREVER * NSEC_PER_SEC);
-        dispatch_source_set_event_handler(self.timer, ^{
-            dispatch_async(dispatch_get_main_queue(), ^{
-                __strong typeof(*&wSelf) self = wSelf;
-                [self showUnAuthorizedTips];
-            });
-        });
-        dispatch_resume(self.timer);
-        
-    }else {
-        [self showUnAuthorizedTips];
-    }
-
-}
 
 /**
  *  处理当用户未授权访问相册时 tipsLabel的点击手势,暂时有bug
  */
-- (void)_handleTipsTap {
+- (void)handleTipsTapAction {
     
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
 }
@@ -171,7 +163,7 @@
 /**
  *  设置navigationBar的样式
  */
-- (void)_setupNavigationBarAppearance {
+- (void)setupNavigationBarAppearance {
     self.navigationBar.barStyle = UIBarStyleBlack;
     self.navigationBar.translucent = YES;
     

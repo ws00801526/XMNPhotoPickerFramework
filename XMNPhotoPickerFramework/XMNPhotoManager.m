@@ -168,7 +168,6 @@
     }else if (originType == PHAssetMediaTypeAudio) {
         return XMNAssetTypeAudio;
     }
-    
     return XMNAssetTypePhoto;
 }
 

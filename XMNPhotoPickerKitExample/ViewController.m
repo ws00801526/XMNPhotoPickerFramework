@@ -114,7 +114,7 @@
     //1. 推荐使用XMNPhotoPicker 的单例
     //2. 设置选择完照片的block回调
     __weak typeof(*&self) wSelf = self;
-    [XMNPhotoPicker sharePhotoPicker].maxCount = 2;
+    [XMNPhotoPicker sharePhotoPicker].maxCount = 9;
     [[XMNPhotoPicker sharePhotoPicker] setDidFinishPickingPhotosBlock:^(NSArray<UIImage *> *images, NSArray<XMNAssetModel *> *assets) {
         __strong typeof(*&wSelf) self = wSelf;
         NSLog(@"picker images :%@ \n\n assets:%@",images,assets);

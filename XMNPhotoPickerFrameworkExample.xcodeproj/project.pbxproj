@@ -26,6 +26,7 @@
 		97103A271C631DFA00AC3B43 /* XMNPhotoPicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97103A101C631DFA00AC3B43 /* XMNPhotoPicker.xib */; };
 		97103A281C631DFA00AC3B43 /* XMNPhotoPreviewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 97103A121C631DFA00AC3B43 /* XMNPhotoPreviewCell.m */; };
 		97103A291C631DFA00AC3B43 /* XMNPhotoManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 97103A141C631DFA00AC3B43 /* XMNPhotoManager.m */; };
+		9725EC431CD347310073F4AD /* XMNPhotoStickLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 9725EC421CD347310073F4AD /* XMNPhotoStickLayout.m */; };
 		972D3D6F1C59E9F800B057BD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 972D3D6E1C59E9F800B057BD /* main.m */; };
 		972D3D721C59E9F800B057BD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 972D3D711C59E9F800B057BD /* AppDelegate.m */; };
 		972D3D751C59E9F800B057BD /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 972D3D741C59E9F800B057BD /* ViewController.m */; };
@@ -82,6 +83,8 @@
 		97103A141C631DFA00AC3B43 /* XMNPhotoManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMNPhotoManager.m; sourceTree = "<group>"; };
 		97103A151C631DFA00AC3B43 /* XMNPhotoPickerDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMNPhotoPickerDefines.h; sourceTree = "<group>"; };
 		97103A161C631DFA00AC3B43 /* XMNPhotoPickerFramework.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMNPhotoPickerFramework.h; sourceTree = "<group>"; };
+		9725EC411CD347310073F4AD /* XMNPhotoStickLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMNPhotoStickLayout.h; sourceTree = "<group>"; };
+		9725EC421CD347310073F4AD /* XMNPhotoStickLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMNPhotoStickLayout.m; sourceTree = "<group>"; };
 		972D3D6A1C59E9F800B057BD /* XMNPhotoPickerFrameworkExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XMNPhotoPickerFrameworkExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		972D3D6E1C59E9F800B057BD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		972D3D701C59E9F800B057BD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -186,6 +189,8 @@
 				97103A101C631DFA00AC3B43 /* XMNPhotoPicker.xib */,
 				97103A111C631DFA00AC3B43 /* XMNPhotoPreviewCell.h */,
 				97103A121C631DFA00AC3B43 /* XMNPhotoPreviewCell.m */,
+				9725EC411CD347310073F4AD /* XMNPhotoStickLayout.h */,
+				9725EC421CD347310073F4AD /* XMNPhotoStickLayout.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -353,6 +358,7 @@
 				97103A1A1C631DFA00AC3B43 /* XMNPhotoPickerController.m in Sources */,
 				97103A1E1C631DFA00AC3B43 /* XMNAssetModel.m in Sources */,
 				97103A1B1C631DFA00AC3B43 /* XMNPhotoPreviewController.m in Sources */,
+				9725EC431CD347310073F4AD /* XMNPhotoStickLayout.m in Sources */,
 				972D3D751C59E9F800B057BD /* ViewController.m in Sources */,
 				97103A291C631DFA00AC3B43 /* XMNPhotoManager.m in Sources */,
 				97103A261C631DFA00AC3B43 /* XMNPhotoPicker.m in Sources */,
