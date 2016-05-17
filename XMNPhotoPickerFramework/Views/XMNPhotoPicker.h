@@ -28,7 +28,7 @@
 /** 用户选择完视频的回调 coverImage:视频的封面,asset 视频资源地址 */
 @property (nonatomic, copy, nullable)   void(^didFinishPickingVideoBlock)(UIImage * _Nullable coverImage, XMNAssetModel * _Nullable asset);
 
-+ (instancetype _Nonnull )sharePhotoPicker;
++ (instancetype _Nonnull )sharePhotoPicker ;
 - (instancetype _Nullable )initWithMaxCount:(NSUInteger)maxCount;
 
 - (void)showPhotoPickerwithController:(UIViewController * _Nonnull )controller animated:(BOOL)animated;

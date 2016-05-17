@@ -96,6 +96,7 @@
 @property (nonatomic, strong) NSMutableArray <XMNAssetModel *> *selectedAssets;
 
 @property (nonatomic, assign, readonly) CGFloat contentViewHeight;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *contentViewBConstraint;
 
 @end
 
@@ -120,6 +121,7 @@
     return self;
 }
 
+
 - (void)dealloc {
     NSLog(@"XMNPhotoPicker dealloc");
 }
@@ -130,24 +132,41 @@
     
     self.selectedAssets ? [self.selectedAssets removeAllObjects] : nil;
     [self.parentController.view addSubview:self];
+    
+    self.contentViewBConstraint.constant = 0;
+    
     if (animated) {
-        CGPoint fromPoint = CGPointMake(self.frame.size.width/2, self.contentViewHeight/2 + self.frame.size.height);
-        CGPoint toPoint   = CGPointMake(self.frame.size.width/2, self.frame.size.height - self.contentViewHeight/2);
-        CABasicAnimation *positionAnim = [UIView animationWithFromValue:[NSValue valueWithCGPoint:fromPoint] toValue:[NSValue valueWithCGPoint:toPoint] duration:.2f forKeypath:@"position"];
-        [self.contentView.layer addAnimation:positionAnim forKey:nil];
+        
+        [UIView animateWithDuration:.3 animations:^{
+            [self layoutIfNeeded];
+        }];
+        
+//        CGPoint fromPoint = CGPointMake(self.frame.size.width/2, self.contentViewHeight/2 + self.frame.size.height);
+//        CGPoint toPoint   = CGPointMake(self.frame.size.width/2, self.frame.size.height - self.contentViewHeight/2);
+//        CABasicAnimation *positionAnim = [UIView animationWithFromValue:[NSValue valueWithCGPoint:fromPoint] toValue:[NSValue valueWithCGPoint:toPoint] duration:.2f forKeypath:@"position"];
+//        [self.contentView.layer addAnimation:positionAnim forKey:nil];
     }
     [self.collectionView reloadData];
 }
 
 - (void)hideAnimated:(BOOL)animated {
     
+    self.contentViewBConstraint.constant = - self.contentViewHeight;
     if (animated) {
-        CGPoint fromPoint   = CGPointMake(self.frame.size.width/2, self.frame.size.height - self.contentViewHeight/2);
-        CGPoint toPoint = CGPointMake(self.frame.size.width/2, self.contentViewHeight/2 + self.frame.size.height);
-        CABasicAnimation *positionAnim = [UIView animationWithFromValue:[NSValue valueWithCGPoint:fromPoint] toValue:[NSValue valueWithCGPoint:toPoint] duration:.2f forKeypath:@"position"];
-        positionAnim.delegate = self;
-        [self.contentView.layer addAnimation:positionAnim forKey:nil];
+        
+        [UIView animateWithDuration:.3 animations:^{
+            [self layoutIfNeeded];
+        } completion:^(BOOL finished) {
+            [self removeFromSuperview];
+        }];
+        
+//        CGPoint fromPoint   = CGPointMake(self.frame.size.width/2, self.frame.size.height - self.contentViewHeight/2);
+//        CGPoint toPoint = CGPointMake(self.frame.size.width/2, self.contentViewHeight/2 + self.frame.size.height);
+//        CABasicAnimation *positionAnim = [UIView animationWithFromValue:[NSValue valueWithCGPoint:fromPoint] toValue:[NSValue valueWithCGPoint:toPoint] duration:.2f forKeypath:@"position"];
+//        positionAnim.delegate = self;
+//        [self.contentView.layer addAnimation:positionAnim forKey:nil];
     }else {
+        [self layoutIfNeeded];
         [self removeFromSuperview];
     }
 }

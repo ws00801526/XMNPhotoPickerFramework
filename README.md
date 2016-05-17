@@ -23,8 +23,8 @@
 
 
 ### 1. 预览
-![最新V1.0.3版本](http://7xlt1j.com1.z0.glb.clouddn.com/XMNPhotoPickerFramework.gif)
 
+![最新V1.0.3版本](http://7xlt1j.com1.z0.glb.clouddn.com/XMNPhotoPickerFramework.gif)
 ![](http://7xlt1j.com1.z0.glb.clouddn.com/XMNPhotoPickerKit-ShowController.gif)
 ![](http://7xlt1j.com1.z0.glb.clouddn.com/XMNPhotoPickerKit-ShowPicker.gif)
 

@@ -68,7 +68,7 @@
 
 - (IBAction)_handleButtonAction {
     //1.初始化一个XMNPhotoPickerController
-    XMNPhotoPickerController *photoPickerC = [[XMNPhotoPickerController alloc] initWithMaxCount:9 delegate:nil];
+    XMNPhotoPickerController *photoPickerC = [[XMNPhotoPickerController alloc] initWithMaxCount:2 delegate:nil];
     //3.取消注释下面代码,使用代理方式回调,代理方法参考XMNPhotoPickerControllerDelegate
 //    photoPickerC.photoPickerDelegate = self;
     
@@ -111,7 +111,7 @@
 }
 
 - (IBAction)_handlePickerAction {
-    //1. 推荐使用XMNPhotoPicker 的单例
+    //1. 使用XMNPhotoPicker 的单例
     //2. 设置选择完照片的block回调
     __weak typeof(*&self) wSelf = self;
     [XMNPhotoPicker sharePhotoPicker].maxCount = 9;
