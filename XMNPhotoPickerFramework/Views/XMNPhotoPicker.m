@@ -133,10 +133,17 @@
     self.selectedAssets ? [self.selectedAssets removeAllObjects] : nil;
     [self.parentController.view addSubview:self];
     
-    self.contentViewBConstraint.constant = 0;
+    if ([self.parentController.view isKindOfClass:[UIScrollView class]]) {
+        UIScrollView *parentView = (UIScrollView *)self.parentController.view;
+        self.contentViewBConstraint.constant = ABS([(UIScrollView *)self.parentController.view contentOffset].y);
+        parentView.scrollEnabled = NO;
+    }else {
+        self.contentViewBConstraint.constant = 0.f;
+    }
     
     if (animated) {
         
+        [self.collectionView layoutIfNeeded];
         [UIView animateWithDuration:.3 animations:^{
             [self layoutIfNeeded];
         }];
@@ -157,6 +164,8 @@
         [UIView animateWithDuration:.3 animations:^{
             [self layoutIfNeeded];
         } completion:^(BOOL finished) {
+            UIScrollView *parentView = (UIScrollView *)self.parentController.view;
+            parentView.scrollEnabled = YES;
             [self removeFromSuperview];
         }];
         
@@ -192,7 +201,7 @@
     cancelButton.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - self.contentViewHeight);
     cancelButton.tag = kXMNCancel;
     [cancelButton addTarget:self action:@selector(handleButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:cancelButton];
+    [self insertSubview:cancelButton belowSubview:self.contentView];
     
     iOS8Later ? [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self] : nil;
     
