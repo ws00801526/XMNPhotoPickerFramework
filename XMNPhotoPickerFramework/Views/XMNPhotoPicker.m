@@ -164,8 +164,10 @@
         [UIView animateWithDuration:.3 animations:^{
             [self layoutIfNeeded];
         } completion:^(BOOL finished) {
-            UIScrollView *parentView = (UIScrollView *)self.parentController.view;
-            parentView.scrollEnabled = YES;
+            if ([self.parentController.view isKindOfClass:[UIScrollView class]]) {
+                UIScrollView *parentView = (UIScrollView *)self.parentController.view;
+                parentView.scrollEnabled = YES;
+            }
             [self removeFromSuperview];
         }];
         
