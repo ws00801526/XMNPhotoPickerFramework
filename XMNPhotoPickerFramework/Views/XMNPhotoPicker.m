@@ -117,7 +117,14 @@
     return self;
 }
 
+- (void)awakeFromNib {
+    
+    self.frame = [UIScreen mainScreen].bounds;
+    [self layoutIfNeeded];
+}
+
 - (void)dealloc {
+    
     NSLog(@"XMNPhotoPicker dealloc");
 }
 
@@ -400,12 +407,19 @@
         __weak typeof(*&self) wSelf = self;
         [videoPreviewC setDidFinishPickingVideo:^(UIImage *coverImage, XMNAssetModel *asset) {
             __weak typeof(*&self) self = wSelf;
+            self.hidden = NO;
             self.didFinishPickingVideoBlock ? self.didFinishPickingVideoBlock(coverImage,asset) : nil;
-            [self hideAnimated:NO];
             [self.parentController dismissViewControllerAnimated:YES completion:nil];
         }];
+        
+        [videoPreviewC setDidFinishPreviewBlock:^{
+            __strong typeof(*&wSelf) self = wSelf;
+            self.hidden = NO;
+        }];
+        self.hidden = YES;
         [self.parentController presentViewController:videoPreviewC animated:YES completion:nil];
     }else {
+        
         XMNPhotoPreviewController *previewC = [[XMNPhotoPreviewController alloc] initWithCollectionViewLayout:[XMNPhotoPreviewController photoPreviewViewLayoutWithSize:[UIScreen mainScreen].bounds.size]];
         previewC.assets = self.assets;
         previewC.maxCount = self.maxCount;
@@ -413,7 +427,9 @@
         previewC.currentIndex = indexPath.row;
         __weak typeof(*&self) wSelf = self;
         [previewC setDidFinishPreviewBlock:^(NSArray<XMNAssetModel *> *selectedAssets) {
+            
             __weak typeof(*&self) self = wSelf;
+            self.hidden = NO;
             self.selectedAssets = [NSMutableArray arrayWithArray:selectedAssets];
             [self updatePhotoLibraryButton];
             [self.collectionView reloadData];
@@ -423,12 +439,14 @@
         [previewC setDidFinishPickingBlock:^(NSArray<UIImage *> *images, NSArray<XMNAssetModel *> *assets) {
             
             __weak typeof(*&self) self = wSelf;
+            self.hidden = NO;
             [self.selectedAssets removeAllObjects];
             self.didFinishPickingPhotosBlock ? self.didFinishPickingPhotosBlock(images,assets) : nil;
             [self hideAnimated:NO];
             [self.parentController dismissViewControllerAnimated:YES completion:nil];
         }];
         
+        self.hidden = YES;
         [self.parentController presentViewController:previewC animated:YES completion:nil];
     }
     
@@ -456,6 +474,7 @@
 #pragma mark - UIImagePickerControllerDelegate
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    
     [self.parentController dismissViewControllerAnimated:YES completion:nil];
     [self hideAnimated:YES];
 }

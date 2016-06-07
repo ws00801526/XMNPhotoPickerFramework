@@ -20,5 +20,7 @@
 /** 点击底部bottomBar 确认按钮后回调 */
 @property (nonatomic, copy)   void(^didFinishPickingVideo)(UIImage *coverImage, XMNAssetModel *asset);
 
+/** 当用户点击返回后 回调 */
+@property (nonatomic, copy)   void(^didFinishPreviewBlock)();
 
 @end

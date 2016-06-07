@@ -149,6 +149,8 @@
 }
 
 - (void)_handleBackAction {
+    
+    self.didFinishPreviewBlock ? self.didFinishPreviewBlock() : nil;
     self.navigationController ? [self.navigationController popViewControllerAnimated:YES] : [self dismissViewControllerAnimated:YES completion:nil];
 }
 
