@@ -20,10 +20,6 @@
 #import "UIView+Animations.h"
 #import "UIViewController+XMNPhotoHUD.h"
 
-
-
-
-
 @interface XMNPhotoPickerCell : UICollectionViewCell;
 
 @property (nonatomic, weak)   UIImageView *imageView;
@@ -121,7 +117,6 @@
     return self;
 }
 
-
 - (void)dealloc {
     NSLog(@"XMNPhotoPicker dealloc");
 }
@@ -131,27 +126,23 @@
 - (void)showAnimated:(BOOL)animated {
     
     self.selectedAssets ? [self.selectedAssets removeAllObjects] : nil;
-    [self.parentController.view addSubview:self];
+    [[UIApplication sharedApplication].keyWindow addSubview:self];
     
     if ([self.parentController.view isKindOfClass:[UIScrollView class]]) {
         UIScrollView *parentView = (UIScrollView *)self.parentController.view;
-        self.contentViewBConstraint.constant = ABS([(UIScrollView *)self.parentController.view contentOffset].y);
+        self.contentViewBConstraint.constant = .0f;
         parentView.scrollEnabled = NO;
     }else {
-        self.contentViewBConstraint.constant = 0.f;
+        self.contentViewBConstraint.constant = .0f;
     }
     
     if (animated) {
-        
         [self.collectionView layoutIfNeeded];
         [UIView animateWithDuration:.3 animations:^{
             [self layoutIfNeeded];
         }];
-        
-//        CGPoint fromPoint = CGPointMake(self.frame.size.width/2, self.contentViewHeight/2 + self.frame.size.height);
-//        CGPoint toPoint   = CGPointMake(self.frame.size.width/2, self.frame.size.height - self.contentViewHeight/2);
-//        CABasicAnimation *positionAnim = [UIView animationWithFromValue:[NSValue valueWithCGPoint:fromPoint] toValue:[NSValue valueWithCGPoint:toPoint] duration:.2f forKeypath:@"position"];
-//        [self.contentView.layer addAnimation:positionAnim forKey:nil];
+    }else {
+        [self layoutIfNeeded];
     }
     [self.collectionView reloadData];
 }
@@ -171,11 +162,6 @@
             [self removeFromSuperview];
         }];
         
-//        CGPoint fromPoint   = CGPointMake(self.frame.size.width/2, self.frame.size.height - self.contentViewHeight/2);
-//        CGPoint toPoint = CGPointMake(self.frame.size.width/2, self.contentViewHeight/2 + self.frame.size.height);
-//        CABasicAnimation *positionAnim = [UIView animationWithFromValue:[NSValue valueWithCGPoint:fromPoint] toValue:[NSValue valueWithCGPoint:toPoint] duration:.2f forKeypath:@"position"];
-//        positionAnim.delegate = self;
-//        [self.contentView.layer addAnimation:positionAnim forKey:nil];
     }else {
         [self layoutIfNeeded];
         [self removeFromSuperview];

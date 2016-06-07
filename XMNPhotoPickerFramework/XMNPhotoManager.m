@@ -96,6 +96,15 @@
                 [albumArr addObject:[XMNAlbumModel albumWithResult:fetchResult name:collection.localizedTitle]];
             }
         }
+        
+        /** 增加了根据相册内图片数量排序功能 */
+        [albumArr sortUsingComparator:^NSComparisonResult(XMNAlbumModel  *obj1, XMNAlbumModel *obj2) {
+            if (obj1.count >= obj2.count) {
+                return NSOrderedAscending;
+            }else {
+                return NSOrderedDescending;
+            }
+        }];
         completionBlock ? completionBlock(albumArr) : nil;
     }else {
         [self.assetLibrary enumerateGroupsWithTypes:ALAssetsGroupAll usingBlock:^(ALAssetsGroup *group, BOOL *stop) {

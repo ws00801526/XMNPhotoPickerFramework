@@ -218,6 +218,7 @@ static NSString * const kXMNAssetCellIdentifier = @"XMNAssetCell";
 #pragma mark - Getters
 
 + (UICollectionViewLayout *)photoCollectionViewLayoutWithWidth:(CGFloat)width {
+    
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     CGFloat margin = kXMNMargin;
     layout.itemSize = kXMNThumbnailSize;

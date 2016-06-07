@@ -243,6 +243,7 @@ static NSString * const kXMNPhotoPreviewIdentifier = @"XMNPhotoPreviewCell";
 
 
 + (UICollectionViewLayout *)photoPreviewViewLayoutWithSize:(CGSize)size {
+    
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     
