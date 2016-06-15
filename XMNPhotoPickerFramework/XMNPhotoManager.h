@@ -120,6 +120,14 @@
 - (void)getAssetNameWithAsset:(id _Nonnull)asset completionBlock:(void(^ _Nonnull)(NSString *_Nullable info))completionBlock;
 
 /**
+ *  根据asset 获取对应的路径
+ *
+ *  @param asset           PHAsset or ALAsset
+ *  @param completionBlock 回调block
+ */
+- (void)getAssetPathWithAsset:(id _Nonnull)asset completionBlock:(void(^ _Nonnull)(NSString *_Nullable info))completionBlock;
+
+/**
  *  根据asset获取Video信息
  *
  *  @param asset           PHAsset or ALAsset

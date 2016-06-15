@@ -139,6 +139,7 @@
 }
 
 - (void)_pausePlayer {
+    
     [self.playButton setImage:[UIImage imageNamed:@"video_preview_play_normal"] forState:UIControlStateNormal];
     [self.player pause];
     [self.navigationController setNavigationBarHidden:NO animated:YES];

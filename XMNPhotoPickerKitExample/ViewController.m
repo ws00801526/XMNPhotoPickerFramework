@@ -13,6 +13,10 @@
 
 #import "XMNAssetCell.h"
 
+
+#import <XMNPhotoBrowser/XMNPhotoBrowser.h>
+
+
 @interface ViewController () <UICollectionViewDataSource,UICollectionViewDelegate>
 
 @property (nonatomic, copy)   NSArray<XMNAssetModel *> *assets;
@@ -57,18 +61,78 @@
     assetCell.contentView.backgroundColor = [UIColor greenColor];
     [assetCell configCellWithItem:self.assets[indexPath.row]];
     return assetCell;
-
 }
 
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    NSArray *links = @[
+                       /*
+                        You can add your image url here.
+                        */
+                       @"http://img3.duitang.com/uploads/item/201505/02/20150502005315_2zBTe.thumb.700_0.jpeg",
+                       @"http://h.hiphotos.baidu.com/image/pic/item/cb8065380cd7912340202a49a5345982b3b780cf.jpg",
+                       @"http://c.hiphotos.baidu.com/image/pic/item/9c16fdfaaf51f3de4e7a03599ceef01f3b2979c7.jpg",
+                       // progressive jpeg
+                       @"https://s-media-cache-ak0.pinimg.com/1200x/2e/0c/c5/2e0cc5d86e7b7cd42af225c29f21c37f.jpg",
+                       
+                       // animated gif: http://cinemagraphs.com/
+                       @"http://i.imgur.com/uoBwCLj.gif",
+                       @"http://i.imgur.com/8KHKhxI.gif",
+                       @"http://i.imgur.com/WXJaqof.gif",
+                       
+                       // animated gif: https://dribbble.com/markpear
+                       @"https://d13yacurqjgara.cloudfront.net/users/345826/screenshots/1780193/dots18.gif",
+                       @"https://d13yacurqjgara.cloudfront.net/users/345826/screenshots/1809343/dots17.1.gif",
+                       @"https://d13yacurqjgara.cloudfront.net/users/345826/screenshots/1845612/dots22.gif",
+                       @"https://d13yacurqjgara.cloudfront.net/users/345826/screenshots/1820014/big-hero-6.gif",
+                       @"https://d13yacurqjgara.cloudfront.net/users/345826/screenshots/1819006/dots11.0.gif",
+                       @"https://d13yacurqjgara.cloudfront.net/users/345826/screenshots/1799885/dots21.gif",
+                       
+                       // animaged gif: https://dribbble.com/jonadinges
+                       @"https://d13yacurqjgara.cloudfront.net/users/288987/screenshots/2025999/batman-beyond-the-rain.gif",
+                       @"https://d13yacurqjgara.cloudfront.net/users/288987/screenshots/1855350/r_nin.gif",
+                       @"https://d13yacurqjgara.cloudfront.net/users/288987/screenshots/1963497/way-back-home.gif",
+                       @"https://d13yacurqjgara.cloudfront.net/users/288987/screenshots/1913272/depressed-slurp-cycle.gif",
+                       
+                       // jpg: https://dribbble.com/snootyfox
+                       @"https://d13yacurqjgara.cloudfront.net/users/26059/screenshots/2047158/beerhenge.jpg",
+                       @"https://d13yacurqjgara.cloudfront.net/users/26059/screenshots/2016158/avalanche.jpg",
+                       @"https://d13yacurqjgara.cloudfront.net/users/26059/screenshots/1839353/pilsner.jpg",
+                       @"https://d13yacurqjgara.cloudfront.net/users/26059/screenshots/1833469/porter.jpg",
+                       @"https://d13yacurqjgara.cloudfront.net/users/26059/screenshots/1521183/farmers.jpg",
+                       @"https://d13yacurqjgara.cloudfront.net/users/26059/screenshots/1391053/tents.jpg",
+                       @"https://d13yacurqjgara.cloudfront.net/users/26059/screenshots/1399501/imperial_beer.jpg",
+                       @"https://d13yacurqjgara.cloudfront.net/users/26059/screenshots/1488711/fishin.jpg",
+                       @"https://d13yacurqjgara.cloudfront.net/users/26059/screenshots/1466318/getaway.jpg",
+                       
+                       // animated webp and apng: http://littlesvr.ca/apng/gif_apng_webp.html
+                       @"http://littlesvr.ca/apng/images/BladeRunner.png",
+                       @"http://littlesvr.ca/apng/images/Contact.webp",
+                       ];
+    NSMutableArray *photos = [NSMutableArray array];
+    [self.assets enumerateObjectsUsingBlock:^(XMNAssetModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        XMNPhotoModel *model = [[XMNPhotoModel alloc] initWithImagePath:links[idx]
+                                                              thumbnail:[YYImage imageNamed:@"video_preview_play_normal"]];
+        [photos addObject:model];
+    }];
 
+    // 够着XMNPhotoBrowserController 实例
+    XMNPhotoBrowserController *browserC = [[XMNPhotoBrowserController alloc] initWithPhotos:photos];
+    // 设置第一张预览图片位置  默认0
+    browserC.currentItemIndex = indexPath.row;
+    // 设置 预览的sourceView
+        browserC.sourceView = [[collectionView cellForItemAtIndexPath:indexPath] valueForKey:@"photoImageView"];
+    // 使用presentVC方式 弹出
+    [self presentViewController:browserC animated:YES completion:nil];
+}
 
 #pragma mark - Methods
 
 
-
 - (IBAction)_handleButtonAction {
     //1.初始化一个XMNPhotoPickerController
-    XMNPhotoPickerController *photoPickerC = [[XMNPhotoPickerController alloc] initWithMaxCount:2 delegate:nil];
+    XMNPhotoPickerController *photoPickerC = [[XMNPhotoPickerController alloc] initWithMaxCount:99 delegate:nil];
     //3.取消注释下面代码,使用代理方式回调,代理方法参考XMNPhotoPickerControllerDelegate
 //    photoPickerC.photoPickerDelegate = self;
     

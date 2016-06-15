@@ -52,7 +52,6 @@
     [singleTap requireGestureRecognizerToFail:doubleTap];
     [self.contentView addGestureRecognizer:singleTap];
     [self.contentView addGestureRecognizer:doubleTap];
-    
 }
 
 - (void)_resizeSubviews {

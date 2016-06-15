@@ -67,7 +67,7 @@
         [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
             
         }];
-        [self performSelector:@selector(handleAuthorized) withObject:nil afterDelay:.3];
+        [self performSelector:@selector(handleAuthorized) withObject:nil afterDelay:.1f];
         return;
     }
     
@@ -103,6 +103,7 @@
  *  @param assets 具体回传的资源
  */
 - (void)didFinishPickingPhoto:(NSArray<XMNAssetModel *> *)assets {
+    
     NSMutableArray *images = [NSMutableArray array];
     [assets enumerateObjectsUsingBlock:^(XMNAssetModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [images addObject:obj.previewImage];

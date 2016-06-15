@@ -39,6 +39,9 @@ typedef enum : NSUInteger {
 /** 图片的相关信息 */
 @property (nonatomic, copy  , readonly, nullable)   NSString *filename;
 
+/** 图片路径,视频路径 */
+@property (nonatomic, copy  , readonly, nullable)   NSString *filepath;
+
 /// ========================================
 /// @name   视频,audio相关信息
 /// ========================================
@@ -70,7 +73,7 @@ typedef enum : NSUInteger {
  *
  *  @return XMNAssetModel实例
  */
-+ ( XMNAssetModel  * _Nonnull )modelWithAsset:(_Nonnull id)asset type:(XMNAssetType)type;
++ (XMNAssetModel  * _Nonnull )modelWithAsset:(_Nonnull id)asset type:(XMNAssetType)type;
 
 /**
  *  根据asset,type,timeLength获取XMNAssetModel实例

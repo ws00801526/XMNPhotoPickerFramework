@@ -296,15 +296,16 @@
  */
 - (void)getImageOrientationWithAsset:(id _Nonnull)asset
                      completionBlock:(void(^_Nonnull)(UIImageOrientation imageOrientation))completionBlock {
-    if (iOS8Later) {
-        PHImageRequestOptions *imageRequestOptions = [[PHImageRequestOptions alloc] init];
-        imageRequestOptions.synchronous = YES;
-        [self.cachingImageManager requestImageDataForAsset:asset options:imageRequestOptions resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
-            completionBlock ? completionBlock(orientation) : nil;
-        }];
-    } else {
-        completionBlock ? completionBlock([[asset valueForProperty:@"ALAssetPropertyOrientation"] integerValue]) : nil;
-    }
+    
+#ifdef iOS8Later
+    PHImageRequestOptions *imageRequestOptions = [[PHImageRequestOptions alloc] init];
+    imageRequestOptions.synchronous = YES;
+    [self.cachingImageManager requestImageDataForAsset:asset options:imageRequestOptions resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+        completionBlock ? completionBlock(orientation) : nil;
+    }];
+#else
+    completionBlock ? completionBlock([[asset valueForProperty:@"ALAssetPropertyOrientation"] integerValue]) : nil;
+#endif
 }
 
 - (void)getAssetSizeWithAsset:(id)asset completionBlock:(void(^)(CGFloat size))completionBlock {
@@ -325,22 +326,45 @@
  *  @param asset           PHAsset or ALAsset
  *  @param completionBlock 回调block
  */
-- (void)getAssetNameWithAsset:(id _Nonnull)asset completionBlock:(void(^ _Nonnull)(NSString *_Nullable info))completionBlock {
+- (void)getAssetNameWithAsset:(id _Nonnull)asset
+              completionBlock:(void(^ _Nonnull)(NSString *_Nullable info))completionBlock {
+    
     if ([asset isKindOfClass:[PHAsset class]]) {
-        if (iOS9Later) {
-            PHAssetResource *assetResource = [[PHAssetResource assetResourcesForAsset:asset] firstObject];
-            completionBlock ? completionBlock(assetResource ? [assetResource originalFilename] : @"unknown") : nil;
-        }else {
-            PHImageRequestOptions *imageRequestOptions = [[PHImageRequestOptions alloc] init];
-            imageRequestOptions.synchronous = YES;
-            [self.cachingImageManager requestImageDataForAsset:asset options:imageRequestOptions resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
-                NSLog(@"11");
-                completionBlock ? completionBlock(                [info[@"PHImageFileURLKey"] lastPathComponent]) : nil;
-            }];
-        }
+#ifdef iOS9Later
+        PHAssetResource *assetResource = [[PHAssetResource assetResourcesForAsset:asset] firstObject];
+        completionBlock ? completionBlock(assetResource ? [assetResource originalFilename] : @"unknown") : nil;
+#else
+        PHImageRequestOptions *imageRequestOptions = [[PHImageRequestOptions alloc] init];
+        imageRequestOptions.synchronous = YES;
+        [self.cachingImageManager requestImageDataForAsset:asset options:imageRequestOptions resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+            completionBlock ? completionBlock([info[@"PHImageFileURLKey"] lastPathComponent]) : nil;
+        }];
+#endif
     } else if ([asset isKindOfClass:[ALAsset class]]) {
         ALAssetRepresentation *representation = [asset defaultRepresentation];
         completionBlock ? completionBlock([representation filename]) : nil;
+    }
+}
+
+
+/**
+ *  根据asset 获取对应的路径
+ *
+ *  @param asset           PHAsset or ALAsset
+ *  @param completionBlock 回调block
+ */
+- (void)getAssetPathWithAsset:(id _Nonnull)asset
+              completionBlock:(void(^ _Nonnull)(NSString *_Nullable info))completionBlock {
+    
+    if ([asset isKindOfClass:[PHAsset class]]) {
+        PHImageRequestOptions *imageRequestOptions = [[PHImageRequestOptions alloc] init];
+        imageRequestOptions.synchronous = YES;
+        [self.cachingImageManager requestImageDataForAsset:asset options:imageRequestOptions resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+            completionBlock ? completionBlock([info[@"PHImageFileURLKey"] absoluteString]) : nil;
+        }];
+    } else if ([asset isKindOfClass:[ALAsset class]]) {
+        ALAssetRepresentation *representation = [asset defaultRepresentation];
+        completionBlock ? completionBlock([[representation url] absoluteString]) : nil;
     }
 }
 /**
@@ -351,6 +375,7 @@
  */
 - (void)getVideoInfoWithAsset:(id _Nonnull)asset
               completionBlock:(void(^ _Nonnull)(AVPlayerItem * _Nullable playerItem,NSDictionary * _Nullable playetItemInfo))completionBlock {
+    
     if ([asset isKindOfClass:[PHAsset class]]) {
         [[PHImageManager defaultManager] requestPlayerItemForVideo:asset options:nil resultHandler:^(AVPlayerItem * _Nullable playerItem, NSDictionary * _Nullable info) {
             completionBlock ? completionBlock(playerItem,info) : nil;
