@@ -8,15 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-
-/** 加载图片的显示方式 */
-typedef NS_ENUM(NSUInteger, XMNPhotoBrowserLoadingMode) {
-    
-    /** 显示转圈动画 */
-    XMNPhotoBrowserLoadingCircle = 0,
-    /** 显示加载进度 */
-    XMNPhotoBrowserLoadingProgress,
-};
+UIKIT_EXTERN CGFloat kXMNPhotoBrowserCellPadding;
 
 @class XMNPhotoModel;
 /**

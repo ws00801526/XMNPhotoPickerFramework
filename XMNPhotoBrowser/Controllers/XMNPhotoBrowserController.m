@@ -49,6 +49,8 @@ static NSString * const kXMNPhotoBrowserCellIdentifier = @"com.XMFraker.XMNPhoto
     self.view.backgroundColor = [UIColor blackColor];
     
     [self setupCollectionView];
+    self.collectionView.frame = CGRectMake(0, 0, self.view.bounds.size.width + kXMNPhotoBrowserCellPadding, self.view.bounds.size.height);
+    
 }
 
 
@@ -79,21 +81,22 @@ static NSString * const kXMNPhotoBrowserCellIdentifier = @"com.XMFraker.XMNPhoto
 }
 
 
+
+
+/// ========================================
+/// @name   支持屏幕旋转功能
+/// ========================================
+
 - (void)viewWillTransitionToSize:(CGSize)size
        withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     
-    NSLog(@"屏幕旋转 :%@",NSStringFromCGSize(size));
-
+    
     NSInteger index = [[self.collectionView indexPathsForVisibleItems] firstObject].row;
+    NSLog(@"屏幕旋转 :%@ index :%d",NSStringFromCGSize(size), (int)index);
     [self.collectionView setCollectionViewLayout:[[self class] photoPreviewViewLayoutWithSize:size] animated:NO];
     [self.collectionView reloadData];
-    /** 出现时 滚到到指定的index */
-    
     if (self.photos && self.photos.count > index) {
-        
-        [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:index inSection:0]
-                                    atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
-        [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]]];
+        self.collectionView.contentOffset = CGPointMake((size.width + kXMNPhotoBrowserCellPadding) * index, 0);
     }
 }
 
@@ -182,10 +185,14 @@ static NSString * const kXMNPhotoBrowserCellIdentifier = @"com.XMFraker.XMNPhoto
 
 #pragma mark - UIScrollViewDelegate
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     
-    CGPoint offSet = scrollView.contentOffset;
-    self.currentItemIndex = offSet.x / self.view.frame.size.width;
+    NSInteger currentItemIndex = (NSInteger)(scrollView.contentOffset.x / (scrollView.frame.size.width));
+    if (currentItemIndex == self.photos.count - 2) {
+        currentItemIndex = roundf((scrollView.contentOffset.x) / (scrollView.frame.size.width));
+    }
+    
+    self.currentItemIndex = currentItemIndex;
 }
 
 #pragma mark - Setters
@@ -208,12 +215,9 @@ static NSString * const kXMNPhotoBrowserCellIdentifier = @"com.XMFraker.XMNPhoto
     
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    layout.itemSize = CGSizeMake(size.width, size.height);
+    layout.itemSize = CGSizeMake(size.width + kXMNPhotoBrowserCellPadding, size.height);
     layout.minimumInteritemSpacing = 0;
     layout.minimumLineSpacing = 0;
-//    layout.sectionInset = UIEdgeInsetsMake(0, 16, 0, 16);
-//    layout.headerReferenceSize = CGSizeMake(10, 10);
-//    layout.footerReferenceSize = CGSizeMake(10, 10);
     return layout;
 }
 
