@@ -13,6 +13,9 @@
 
 #import "YYWebImage.h"
 
+
+CGFloat kXMNPhotoBrowserCellPadding = 16.f;
+
 @interface XMNPhotoBrowserCell () <UIScrollViewDelegate>
 
 @property (nonatomic, strong) UIScrollView *scrollView;
@@ -36,9 +39,11 @@
     return self;
 }
 
-- (void)prepareForReuse {
+
+- (void)layoutSubviews {
     
-    self.imageView.image = nil;
+    [super layoutSubviews];
+    [self resizeSubviews];
 }
 
 #pragma mark - Methods
@@ -51,6 +56,8 @@
 - (void)configCellWithItem:(XMNPhotoModel *)item {
     
     __weak typeof(*&self) wSelf = self;
+    
+    self.progressView.hidden =  YES;
     [self.scrollView setZoomScale:1.0f];
     
     /** 如果已经下载完毕 直接显示图片 不再去下载 */
@@ -89,11 +96,16 @@
                                     dispatch_async(dispatch_get_main_queue(), ^{
                                         __strong typeof(*&wSelf) self = wSelf;
                                         if (stage == YYWebImageStageFinished) {
+                                            
                                             self.progressView.progress = 1.1f;
-                                            self.imageView.image = image;
-                                            [self resizeSubviews];
-//                                            [self showImageWithFadeAnimation:image];
-//                                            self.progressView.hidden = YES;
+                                            if (self.loadingMode == XMNPhotoBrowserLoadingCircle) {
+                                                [self showImageWithFadeAnimation:image];
+                                            }else {
+                                                [self.progressView progressAnimiationDidStop:^{
+                                                    self.imageView.image = image;
+                                                    [self resizeSubviews];
+                                                }];
+                                            }
                                         }
                                     });
                                 }
@@ -113,6 +125,7 @@
 /// @name   Private Methods
 /// ========================================
 
+
 - (void)showImageWithFadeAnimation:(UIImage *)image {
     
     [UIView animateWithDuration:.15
@@ -131,6 +144,8 @@
     
     self.backgroundColor = self.contentView.backgroundColor = [UIColor blackColor];
     
+    self.loadingMode = XMNPhotoBrowserLoadingProgress;
+    
     [self.containerView addSubview:self.imageView];
     [self.scrollView addSubview:self.containerView];
     [self.contentView addSubview:self.scrollView];
@@ -140,8 +155,9 @@
     progressView.hidden = YES;
     progressView.backgroundView.backgroundColor = [UIColor clearColor];
     progressView.backgroundColor = [UIColor clearColor];
-    progressView.indeterminate = YES;
-    progressView.showsText = YES;
+    progressView.indeterminate = self.loadingMode == XMNPhotoBrowserLoadingCircle;
+    progressView.showsText = self.loadingMode == XMNPhotoBrowserLoadingProgress;
+//    progressView.blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
     [self.containerView addSubview:self.progressView = progressView];
 
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap)];
@@ -156,36 +172,23 @@
 
 - (void)resizeSubviews {
     
-    self.containerView.frame = self.bounds;
+    self.containerView.frame = CGRectMake(0, 0, self.bounds.size.width - 16, self.bounds.size.height);
     UIImage *image = self.imageView.image;
     if (!image) {
         return;
     }
-
-    CGFloat widthPercent = (image.size.width ) / self.frame.size.width;
-    CGFloat heightPercent = (image.size.height ) / self.frame.size.height;
-    if (widthPercent <= 1.0f && heightPercent <= 1.0f) {
-        self.containerView.bounds = CGRectMake(0, 0, image.size.width, image.size.height);
-        self.containerView.center = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2);
-    } else if (widthPercent > 1.0f && heightPercent < 1.0f) {
-        self.containerView.frame = CGRectMake(0, 0, self.frame.size.width, (image.size.height * self.frame.size.width) / image.size.width);
-    }else if (widthPercent <= 1.0f && heightPercent > 1.0f) {
-        self.containerView.frame = CGRectMake(0, 0, (self.frame.size.height * image.size.width) / image.size.height ,self.frame.size.height);
-    }else {
-        if (widthPercent > heightPercent) {
-            self.containerView.frame = CGRectMake(0, 0, self.frame.size.width, (image.size.height * self.frame.size.width) / image.size.width);
-        }else {
-            self.containerView.frame = CGRectMake(0, 0, (self.frame.size.height * image.size.width) / image.size.height ,self.frame.size.height);
-        }
-    }
     
-    self.scrollView.contentSize = CGSizeMake(MAX(self.frame.size.width, self.containerView.bounds.size.width), MAX(self.frame.size.height, self.containerView.bounds.size.height));
+    CGSize size = [XMNPhotoModel adjustOriginSize:image.size
+                                     toTargetSize:CGSizeMake(self.bounds.size.width - kXMNPhotoBrowserCellPadding, self.bounds.size.height)];
+    self.containerView.frame = CGRectMake(0, 0, size.width, size.height);
+
+    self.scrollView.contentSize = CGSizeMake(MAX(self.frame.size.width - kXMNPhotoBrowserCellPadding, self.containerView.bounds.size.width), MAX(self.frame.size.height, self.containerView.bounds.size.height));
     [self.scrollView scrollRectToVisible:self.bounds animated:NO];
     self.scrollView.alwaysBounceVertical = self.containerView.frame.size.height <= self.frame.size.height ? NO : YES;
     self.imageView.frame = self.containerView.bounds;
     self.progressView.frame = self.containerView.bounds;
     [self scrollViewDidZoom:self.scrollView];
-    self.scrollView.maximumZoomScale = MAX(MAX(widthPercent, heightPercent), 3.f);
+    self.scrollView.maximumZoomScale = MAX(MAX(image.size.width/(self.bounds.size.width - kXMNPhotoBrowserCellPadding), image.size.height / self.bounds.size.height), 3.f);
 }
 
 
@@ -223,13 +226,22 @@
     self.containerView.center = CGPointMake(scrollView.contentSize.width * 0.5 + offsetX, scrollView.contentSize.height * 0.5 + offsetY);
 }
 
+#pragma mark - Setters
+
+- (void)setLoadingMode:(XMNPhotoBrowserLoadingMode)loadingMode {
+    
+    _loadingMode = loadingMode;
+    self.progressView.indeterminate = self.loadingMode == XMNPhotoBrowserLoadingCircle;
+    self.progressView.showsText = self.loadingMode == XMNPhotoBrowserLoadingProgress;
+}
+
 #pragma mark - Getters
 
 - (UIScrollView *)scrollView {
     
     if (!_scrollView) {
         
-        _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
+        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width - 16, self.bounds.size.height)];
         _scrollView.bouncesZoom = YES;
         _scrollView.maximumZoomScale = 3.0f;
         _scrollView.minimumZoomScale = 1.0f;

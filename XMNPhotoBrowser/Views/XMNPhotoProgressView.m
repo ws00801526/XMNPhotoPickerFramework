@@ -195,11 +195,22 @@
 }
 
 - (void)ignoreVibrancyEffect {
+    
     if (self.blurEffect) {
         [self.backgroundLayer removeFromSuperlayer];
         [self.textLabel removeFromSuperview];
         [self.backgroundView.layer addSublayer:self.backgroundLayer];
         [self.backgroundView addSubview:self.textLabel];
+    }
+}
+
+
+- (void)setHidden:(BOOL)hidden {
+    
+    [super setHidden:hidden];
+    if (!hidden) {
+        self.alpha = 1.f;
+        self.superview ? [self.superview bringSubviewToFront:self] : nil;
     }
 }
 
@@ -214,9 +225,11 @@
     self.hidden = NO;
     
     if (indeterminate) {
+        
         _progressLayer.strokeStart = 0.1;
         _progressLayer.strokeEnd = 1.0;
         
+        /** 旋转动画 */
         CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
         animation.toValue = @(M_PI);
         animation.duration = 0.5;
@@ -225,15 +238,62 @@
         animation.cumulative = YES;
         
         [self.backgroundLayer addAnimation:animation forKey:nil];
+        
+        //内层进度条动画
+        CABasicAnimation *strokeAnim1 = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
+        strokeAnim1.fromValue = @0.0;
+        strokeAnim1.toValue = @1.0;
+        strokeAnim1.duration = 1.5;
+        strokeAnim1.beginTime = 0.0;
+        strokeAnim1.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+        
+        //内层进度条动画
+        CABasicAnimation *strokeAnim2 = [CABasicAnimation animationWithKeyPath:@"strokeStart"];
+        strokeAnim2.fromValue = @0.0;
+        strokeAnim2.toValue = @1.0;
+        strokeAnim2.duration = 1.5;
+        strokeAnim2.beginTime = 1.5;
+        strokeAnim2.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+        
+        CAAnimationGroup *animGroup = [CAAnimationGroup animation];
+        animGroup.duration = 3.f;
+        animGroup.repeatCount = MAXFLOAT;
+        animGroup.fillMode = kCAFillModeForwards;
+        animGroup.animations = @[strokeAnim1, strokeAnim2];
+        
+        [_progressLayer addAnimation:animGroup forKey:@"strokeAnim"];
+        
+        /** 增加随机颜色 */
+//        [NSTimer scheduledTimerWithTimeInterval:1.5f
+//                                         target:self
+//                                       selector:@selector(randomColor)
+//                                       userInfo:nil
+//                                        repeats:YES];
     } else {
+        
 #if !TARGET_INTERFACE_BUILDER
         _progressLayer.actions = @{@"strokeStart": [NSNull null], @"strokeEnd": [NSNull null]};
         _progressLayer.strokeStart = 0.0;
         _progressLayer.strokeEnd = 0.0;
+        [_progressLayer removeAllAnimations];
         
         [self.backgroundLayer removeAllAnimations];
 #endif
     }
+}
+
+- (void)randomColor {
+    
+    UIColor *color = (UIColor *)[@[
+                                   [UIColor purpleColor],
+                                   [UIColor orangeColor],
+                                   [UIColor cyanColor],
+                                   [UIColor redColor],
+                                   [UIColor greenColor],
+                                   [UIColor blueColor],
+                                   [UIColor yellowColor]] objectAtIndex:arc4random()%7];
+    
+    self.progressLayer.strokeColor = color.CGColor;
 }
 
 - (void)setProgress:(CGFloat)progress {
@@ -241,10 +301,8 @@
 }
 
 - (void)setProgress:(CGFloat)progress animated:(BOOL)animated {
-    if (self.indeterminate) {
-        self.indeterminate = NO;
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate date]];
-    }
+    
+
     
     if (_progress >= 1.0 && progress >= 1.0) {
         _progress = 1.0;
@@ -262,16 +320,35 @@
         self.hidden = NO;
     }
     
-    self.progressLayer.actions = animated ? nil : @{@"strokeEnd": [NSNull null]};
-    self.progressLayer.strokeEnd = progress;
-    
-    self.textLabel.text = [NSString stringWithFormat:@"%d%%", (int)(progress * 100)];
-    [self layoutTextLabel];
-    
-    if (progress >= 1.0) {
+    if (self.indeterminate) {
+        
+        /** 如果是显示 转圈, 则一直显示 直到加载完成 */
+        //        self.indeterminate = NO;
+        //        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate date]];
+        
+        if (progress >= 1.f) {
+            /** 加载完成,隐藏加载提示 */
+            self.backgroundView.layer.mask = nil;
+            [UIView animateWithDuration:.15f animations:^{
+                self.alpha = .0f;
+                self.transform = CGAffineTransformMakeScale(1.5f, 1.5f);
+            } completion:^(BOOL finished) {
+                
+                self.hidden = YES;
+            }];
+        }
+    }else {
+        self.progressLayer.actions = animated ? nil : @{@"strokeEnd": [NSNull null]};
+        self.progressLayer.strokeEnd = progress;
+        
+        self.textLabel.text = [NSString stringWithFormat:@"%d%%", (int)(progress * 100)];
+        [self layoutTextLabel];
+        
+        if (progress >= 1.0) {
 #if !TARGET_INTERFACE_BUILDER
-        [self performFinishAnimation];
+            [self performFinishAnimation];
 #endif
+        }
     }
     
     _progress = progress;
