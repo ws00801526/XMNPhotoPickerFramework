@@ -155,6 +155,7 @@ static NSString * const kXMNPhotoBrowserCellIdentifier = @"com.XMFraker.XMNPhoto
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     XMNPhotoBrowserCell *browserCell = [collectionView dequeueReusableCellWithReuseIdentifier:kXMNPhotoBrowserCellIdentifier forIndexPath:indexPath];
+    browserCell.loadingMode = self.loadingMode;
     [browserCell configCellWithItem:self.photos[indexPath.row]];
     __weak typeof(*&self) wSelf = self;
     [browserCell setSingleTapBlock:^(XMNPhotoBrowserCell *__weak _Nonnull browserCell) {
@@ -179,6 +180,7 @@ static NSString * const kXMNPhotoBrowserCellIdentifier = @"com.XMFraker.XMNPhoto
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
     
     XMNPhotoBrowserCell *browserCell = (XMNPhotoBrowserCell *)cell;
+    browserCell.loadingMode = self.loadingMode;
     [browserCell configCellWithItem:self.photos[indexPath.row]];
 }
 

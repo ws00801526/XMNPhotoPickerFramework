@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "XMNPhotoBrowserCell.h"
 
 UIKIT_EXTERN CGFloat kXMNPhotoBrowserCellPadding;
+
 
 @class XMNPhotoModel;
 /**
@@ -50,6 +52,10 @@ UIKIT_EXTERN CGFloat kXMNPhotoBrowserCellPadding;
  *  如果传 此参数    放大效果 ,会从sourceImageView 放大到全屏
  */
 @property (nonatomic, weak, nullable) UIView *sourceView;
+
+/** 加载图片时的 加载进度条类型 */
+@property (nonatomic, assign) XMNPhotoBrowserLoadingMode loadingMode;
+
 
 #pragma mark - Life Cycle
 
