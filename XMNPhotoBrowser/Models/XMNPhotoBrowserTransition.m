@@ -55,25 +55,10 @@
             toVC.view.alpha = 1.0;
             
             XMNPhotoModel *photo = [toVC.photos objectAtIndex:toVC.currentItemIndex];
-    
-            /** 设置snapShotView的最终大小 */
-            CGFloat widthPercent = (photo.imageSize.width ) / toVC.view.bounds.size.width;
-            CGFloat heightPercent = (photo.imageSize.height ) / toVC.view.bounds.size.height;
             
-            if (widthPercent <= 1.0f && heightPercent <= 1.0f) {
-                snapShotView.frame = CGRectMake(0, 0, photo.imageSize.width, photo.imageSize.height);
-            } else if (widthPercent > 1.0f && heightPercent < 1.0f) {
-                snapShotView.frame = CGRectMake(0, 0, toVC.view.frame.size.width, (photo.imageSize.height * toVC.view.frame.size.width) / photo.imageSize.width);
-            }else if (widthPercent <= 1.0f && heightPercent > 1.0f) {
-                snapShotView.frame = CGRectMake(0, 0, (photo.imageSize.width * toVC.view.frame.size.height) / photo.imageSize.height ,toVC.view.frame.size.height);
-            }else {
-                if (widthPercent > heightPercent) {
-                    snapShotView.frame = CGRectMake(0, 0, toVC.view.frame.size.width, (photo.imageSize.height * toVC.view.frame.size.width) / photo.imageSize.width);
-                }else {
-                    snapShotView.frame = CGRectMake(0, 0, (photo.imageSize.width * toVC.view.frame.size.height) / photo.imageSize.height ,toVC.view.frame.size.height);
-                }
-            }
-        
+            CGSize size = [XMNPhotoModel adjustOriginSize:photo.imageSize
+                                             toTargetSize:toVC.view.bounds.size];
+            snapShotView.frame = CGRectMake(0, 0, size.width, size.height);
             snapShotView.center = containerView.center;
         } completion:^(BOOL finished) {
             
@@ -104,24 +89,10 @@
     XMNPhotoModel *photo = [toVC.photos objectAtIndex:toVC.currentItemIndex];
     snapShotView.image =   photo.image ? : photo.thumbnail;
 
-    /** 设置snapShotView的最终大小 */
-    CGFloat widthPercent = (photo.imageSize.width ) / toVC.view.bounds.size.width;
-    CGFloat heightPercent = (photo.imageSize.height ) / toVC.view.bounds.size.height;
-    
-    if (widthPercent <= 1.0f && heightPercent <= 1.0f) {
-        snapShotView.frame = CGRectMake(0, 0, photo.imageSize.width, photo.imageSize.height);
-    } else if (widthPercent > 1.0f && heightPercent < 1.0f) {
-        snapShotView.frame = CGRectMake(0, 0, toVC.view.frame.size.width, (photo.imageSize.height * toVC.view.frame.size.width) / photo.imageSize.width);
-    }else if (widthPercent <= 1.0f && heightPercent > 1.0f) {
-        snapShotView.frame = CGRectMake(0, 0, (photo.imageSize.width * toVC.view.frame.size.height) / photo.imageSize.height ,toVC.view.frame.size.height);
-    }else {
-        if (widthPercent > heightPercent) {
-            snapShotView.frame = CGRectMake(0, 0, toVC.view.frame.size.width, (photo.imageSize.height * toVC.view.frame.size.width) / photo.imageSize.width);
-        }else {
-            snapShotView.frame = CGRectMake(0, 0, (photo.imageSize.width * toVC.view.frame.size.height) / photo.imageSize.height ,toVC.view.frame.size.height);
-        }
-    }
-    
+    CGSize size = [XMNPhotoModel adjustOriginSize:photo.imageSize
+                                     toTargetSize:toVC.view.bounds.size];
+    snapShotView.frame = CGRectMake(0, 0, size.width, size.height);
+    snapShotView.center = containerView.center;
     
     snapShotView.center = containerView.center;
     snapShotView.transform = CGAffineTransformMakeScale(.1f, .1f);

@@ -36,4 +36,7 @@
 - (_Nonnull instancetype)initWithImagePath:(NSString * _Nonnull )imagePath
                                  thumbnail:(UIImage * _Nullable )thumnail;
 
+
++ (CGSize)adjustOriginSize:(CGSize)originSize toTargetSize:(CGSize)targetSize;
+
 @end
