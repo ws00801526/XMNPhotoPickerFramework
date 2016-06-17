@@ -73,7 +73,6 @@ static NSString * const kXMNPhotoPreviewIdentifier = @"XMNPhotoPreviewCell";
     NSLog(@"%@  dealloc",NSStringFromClass([self class]));
 }
 
-
 #pragma mark - Methods
 
 - (void)_setup {
@@ -91,8 +90,9 @@ static NSString * const kXMNPhotoPreviewIdentifier = @"XMNPhotoPreviewCell";
     self.collectionView.backgroundColor = [UIColor blackColor];
     self.collectionView.scrollsToTop = NO;
     self.collectionView.showsHorizontalScrollIndicator = NO;
-    self.collectionView.contentSize = CGSizeMake(self.view.frame.size.width * self.assets.count, self.view.frame.size.height);
+    self.collectionView.contentSize = CGSizeMake((self.view.frame.size.width + kXMNPreviewPadding) * self.assets.count, self.view.frame.size.height);
     self.collectionView.pagingEnabled = YES;
+    self.collectionView.frame = CGRectMake(0, 0, (self.view.frame.size.width + kXMNPreviewPadding), self.view.frame.size.height);
 }
 
 - (void)_setupConstraints {
@@ -259,7 +259,7 @@ static NSString * const kXMNPhotoPreviewIdentifier = @"XMNPhotoPreviewCell";
     
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    layout.itemSize = CGSizeMake(size.width , size.height);
+    layout.itemSize = CGSizeMake(size.width + kXMNPreviewPadding, size.height);
     layout.minimumInteritemSpacing = 0;
     layout.minimumLineSpacing = 0;
     return layout;

@@ -23,6 +23,9 @@
 #define kXMNThumbnailWidth ([UIScreen mainScreen].bounds.size.width - 2 * kXMNMargin - 4) / 4 - kXMNMargin
 #define kXMNThumbnailSize CGSizeMake(kXMNThumbnailWidth, kXMNThumbnailWidth)
 
+/** 预览图片时 图片的间距 */
+#define kXMNPreviewPadding 16
+
 #define kXMNCamera 1
 #define kXMNPhotoLibrary 2
 #define kXMNCancel  999

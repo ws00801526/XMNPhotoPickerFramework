@@ -33,10 +33,12 @@
 + (XMNAlbumModel *)albumWithResult:(id)result name:(NSString *)name {
     XMNAlbumModel *model = [[XMNAlbumModel alloc] init];
     model.fetchResult = result;
+    
     model.name = [self _albumNameWithOriginName:name];
     if ([result isKindOfClass:[PHFetchResult class]]) {
         PHFetchResult *fetchResult = (PHFetchResult *)result;
         model.count = fetchResult.count;
+
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored"-Wdeprecated-declarations"
     } else if ([result isKindOfClass:[ALAssetsGroup class]]) {

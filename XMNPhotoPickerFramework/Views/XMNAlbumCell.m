@@ -20,6 +20,16 @@
 @implementation XMNAlbumCell
 
 
+#pragma mark - Override Methods
+
+- (void)awakeFromNib {
+    
+    self.albumCoverImageView.layer.masksToBounds = YES;
+}
+
+
+#pragma mark - Methods
+
 - (void)configCellWithItem:(XMNAlbumModel * _Nonnull)item {
     
     NSMutableAttributedString *nameString = [[NSMutableAttributedString alloc] initWithString:item.name attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16],NSForegroundColorAttributeName:[UIColor blackColor]}];

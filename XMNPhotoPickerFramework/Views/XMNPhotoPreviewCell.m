@@ -10,6 +10,8 @@
 
 #import "XMNAssetModel.h"
 
+#import "XMNPhotoPickerDefines.h"
+
 @interface XMNPhotoPreviewCell () <UIScrollViewDelegate>
 
 @property (nonatomic, strong) UIScrollView *scrollView;
@@ -62,10 +64,10 @@
         return;
     }
     CGSize size = [[self class] adjustOriginSize:image.size
-                                     toTargetSize:CGSizeMake(self.bounds.size.width, self.bounds.size.height)];
+                                     toTargetSize:CGSizeMake(self.bounds.size.width - kXMNPreviewPadding, self.bounds.size.height)];
     self.containerView.frame = CGRectMake(0, 0, size.width, size.height);
     
-    self.scrollView.contentSize = CGSizeMake(MAX(self.frame.size.width, self.containerView.bounds.size.width), MAX(self.frame.size.height, self.containerView.bounds.size.height));
+    self.scrollView.contentSize = CGSizeMake(MAX(self.frame.size.width - 16, self.containerView.bounds.size.width), MAX(self.frame.size.height, self.containerView.bounds.size.height));
     [self.scrollView scrollRectToVisible:self.bounds animated:NO];
     self.scrollView.alwaysBounceVertical = self.containerView.frame.size.height <= self.frame.size.height ? NO : YES;
     self.imageView.frame = self.containerView.bounds;
@@ -78,6 +80,7 @@
 }
 
 - (void)_handleDoubleTap:(UITapGestureRecognizer *)doubleTap {
+    
     if (self.scrollView.zoomScale > 1.0f) {
         [self.scrollView setZoomScale:1.0 animated:YES];
     }else {
@@ -107,7 +110,7 @@
 
 - (UIScrollView *)scrollView {
     if (!_scrollView) {
-        _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
+        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width - kXMNPreviewPadding, self.bounds.size.height)];
         _scrollView.bouncesZoom = YES;
         _scrollView.maximumZoomScale = 3.0f;
         _scrollView.minimumZoomScale = 1.0f;
@@ -120,6 +123,7 @@
         _scrollView.delaysContentTouches = NO;
         _scrollView.canCancelContentTouches = YES;
         _scrollView.alwaysBounceVertical = NO;
+        
     }
     return _scrollView;
 }
