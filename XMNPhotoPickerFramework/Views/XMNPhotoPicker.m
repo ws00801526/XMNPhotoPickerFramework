@@ -399,8 +399,8 @@
     CGSize size = CGSizeZero;
     if ([asset.asset isKindOfClass:[PHAsset class]]) {
         size = CGSizeMake([asset.asset pixelWidth], [asset.asset pixelHeight]);
-    }else if ([asset isKindOfClass:[ALAsset class]]){
-        size = asset.previewImage.size;
+    }else if ([asset.asset isKindOfClass:[ALAsset class]]){
+        size = [[asset.asset defaultRepresentation] dimensions];
     }
     CGFloat scale = (MAX(0, size.width - 10))/size.height;
     return CGSizeMake(scale * (self.collectionView.frame.size.height),self.collectionView.frame.size.height);
