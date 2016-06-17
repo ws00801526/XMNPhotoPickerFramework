@@ -106,7 +106,14 @@
     
     NSMutableArray *images = [NSMutableArray array];
     [assets enumerateObjectsUsingBlock:^(XMNAssetModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        [images addObject:obj.previewImage];
+
+        if (obj.previewImage) {
+            [images addObject:obj.previewImage];
+        }else if (obj.originImage) {
+            [images addObject:obj.originImage];
+        }else if (obj.thumbnail) {
+            [images addObject:obj.thumbnail];
+        }
     }];
     if (self.photoPickerDelegate && [self.photoPickerDelegate respondsToSelector:@selector(photoPickerController:didFinishPickingPhotos:sourceAssets:)]) {
         [self.photoPickerDelegate photoPickerController:self didFinishPickingPhotos:images sourceAssets:assets];

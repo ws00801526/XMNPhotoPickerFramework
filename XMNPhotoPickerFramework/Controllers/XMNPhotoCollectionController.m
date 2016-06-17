@@ -139,6 +139,8 @@ static NSString * const kXMNAssetCellIdentifier = @"XMNAssetCell";
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    
     XMNAssetCell *assetCell = [collectionView dequeueReusableCellWithReuseIdentifier:kXMNAssetCellIdentifier forIndexPath:indexPath];
     [assetCell configCellWithItem:self.assets[indexPath.row]];
     __weak typeof(*&self) wSelf = self;

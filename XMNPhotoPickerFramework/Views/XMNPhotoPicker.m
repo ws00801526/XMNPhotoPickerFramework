@@ -239,6 +239,8 @@
     [self.loadingView startAnimating];
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         [[XMNPhotoManager sharedManager] getAlbumsPickingVideoEnable:YES completionBlock:^(NSArray<XMNAlbumModel *> *albums) {
+            
+            __strong typeof(*&wSelf) self = wSelf;
             if (albums && [albums firstObject]) {
                 self.displayAlbum = [albums firstObject];
                 [[XMNPhotoManager sharedManager] getAssetsFromResult:[[albums firstObject] fetchResult] pickingVideoEnable:YES completionBlock:^(NSArray<XMNAssetModel *> *assets) {
@@ -275,7 +277,14 @@
             }else {
                 NSMutableArray *images = [NSMutableArray array];
                 [self.selectedAssets enumerateObjectsUsingBlock:^(XMNAssetModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                    [images addObject:obj.previewImage];
+
+                    if (obj.previewImage) {
+                        [images addObject:obj.previewImage];
+                    }else if (obj.originImage) {
+                        [images addObject:obj.originImage];
+                    }else if (obj.thumbnail) {
+                        [images addObject:obj.thumbnail];
+                    }
                 }];
                 self.didFinishPickingPhotosBlock ? self.didFinishPickingPhotosBlock(images,self.selectedAssets) : nil;
             }
