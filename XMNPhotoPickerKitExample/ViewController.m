@@ -113,7 +113,7 @@
     [self.assets enumerateObjectsUsingBlock:^(XMNAssetModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         
         XMNPhotoModel *model = [[XMNPhotoModel alloc] initWithImagePath:links[idx]
-                                                              thumbnail:[YYImage imageNamed:@"video_preview_play_normal"]];
+                                                              thumbnail:obj.previewImage];
         [photos addObject:model];
     }];
 
@@ -122,7 +122,7 @@
     // 设置第一张预览图片位置  默认0
     browserC.currentItemIndex = indexPath.row;
     // 设置 预览的sourceView
-        browserC.sourceView = [[collectionView cellForItemAtIndexPath:indexPath] valueForKey:@"photoImageView"];
+    browserC.sourceView = [[collectionView cellForItemAtIndexPath:indexPath] valueForKey:@"photoImageView"];
     // 使用presentVC方式 弹出
     [self presentViewController:browserC animated:YES completion:nil];
 }
