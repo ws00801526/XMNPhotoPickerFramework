@@ -192,6 +192,14 @@
         self.assets = @[asset];
         [self.collectionView reloadData];
     }];
+    
+    /** 添加手势发送图片功能 */
+    [[XMNPhotoPicker sharePhotoPicker] setDidSendAsset:^(XMNAssetModel * _Nonnull asset, UIView * _Nonnull originView, void (^completedBlock)()) {
+        
+        UIImageView *imageView = (UIImageView *)[originView viewWithTag:kXMNGestureSendImageViewTag];
+        completedBlock();
+    }];
+
     //4. 显示XMNPhotoPicker
     [[XMNPhotoPicker sharePhotoPicker] showPhotoPickerwithController:self animated:YES];
 }
