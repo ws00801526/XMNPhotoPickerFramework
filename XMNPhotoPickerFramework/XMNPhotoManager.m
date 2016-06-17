@@ -231,27 +231,27 @@
         }];
     } else {
 
-        CGImageRef fullResolutionImageRef = [[(ALAsset *)asset defaultRepresentation] fullScreenImage];
+        CGImageRef fullResolutionImageRef = [[(ALAsset *)asset defaultRepresentation] fullResolutionImage];
 //        // 通过 fullResolutionImage 获取到的的高清图实际上并不带上在照片应用中使用“编辑”处理的效果，需要额外在 AlAssetRepresentation 中获取这些信息
-//        NSString *adjustment = [[[(ALAsset *)asset defaultRepresentation] metadata] objectForKey:@"AdjustmentXMP"];
-//        if (adjustment) {
-//            // 如果有在照片应用中使用“编辑”效果，则需要获取这些编辑后的滤镜，手工叠加到原图中
-//            NSData *xmpData = [adjustment dataUsingEncoding:NSUTF8StringEncoding];
-//            CIImage *tempImage = [CIImage imageWithCGImage:fullResolutionImageRef];
-//            
-//            NSError *error;
-//            NSArray *filterArray = [CIFilter filterArrayFromSerializedXMP:xmpData
-//                                                         inputImageExtent:tempImage.extent
-//                                                                    error:&error];
-//            CIContext *context = [CIContext contextWithOptions:nil];
-//            if (filterArray && !error) {
-//                for (CIFilter *filter in filterArray) {
-//                    [filter setValue:tempImage forKey:kCIInputImageKey];
-//                    tempImage = [filter outputImage];
-//                }
-//                fullResolutionImageRef = [context createCGImage:tempImage fromRect:[tempImage extent]];
-//            }
-//        }
+        NSString *adjustment = [[[(ALAsset *)asset defaultRepresentation] metadata] objectForKey:@"AdjustmentXMP"];
+        if (adjustment) {
+            // 如果有在照片应用中使用“编辑”效果，则需要获取这些编辑后的滤镜，手工叠加到原图中
+            NSData *xmpData = [adjustment dataUsingEncoding:NSUTF8StringEncoding];
+            CIImage *tempImage = [CIImage imageWithCGImage:fullResolutionImageRef];
+            
+            NSError *error;
+            NSArray *filterArray = [CIFilter filterArrayFromSerializedXMP:xmpData
+                                                         inputImageExtent:tempImage.extent
+                                                                    error:&error];
+            CIContext *context = [CIContext contextWithOptions:nil];
+            if (filterArray && !error) {
+                for (CIFilter *filter in filterArray) {
+                    [filter setValue:tempImage forKey:kCIInputImageKey];
+                    tempImage = [filter outputImage];
+                }
+                fullResolutionImageRef = [context createCGImage:tempImage fromRect:[tempImage extent]];
+            }
+        }
         // 生成最终返回的 UIImage，同时把图片的 orientation 也补充上去
         resultImage = [UIImage imageWithCGImage:fullResolutionImageRef
                                           scale:[[asset defaultRepresentation] scale]

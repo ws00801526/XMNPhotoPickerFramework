@@ -111,6 +111,7 @@
 }
 
 - (void)_setupBottomBar {
+    
     XMNBottomBar *bottomBar = [[XMNBottomBar alloc] initWithBarType:XMNPreviewBottomBar];
     __weak typeof(*&self) wSelf = self;
     self.selectedVideoEnable ? [bottomBar setConfirmBlock:^{

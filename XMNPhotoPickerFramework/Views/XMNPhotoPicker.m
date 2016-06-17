@@ -391,12 +391,18 @@
     return pickerCell;
 }
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
-{
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     XMNAssetModel *asset = self.assets[indexPath.row];
-    CGSize size = asset.previewImage.size;
-    CGFloat scale = (size.width - 10)/size.height;
+    
+    /** 感谢QQ上的独兄弟 提出的建议 */
+    CGSize size = CGSizeZero;
+    if ([asset.asset isKindOfClass:[PHAsset class]]) {
+        size = CGSizeMake([asset.asset pixelWidth], [asset.asset pixelHeight]);
+    }else if ([asset isKindOfClass:[ALAsset class]]){
+        size = asset.previewImage.size;
+    }
+    CGFloat scale = (MAX(0, size.width - 10))/size.height;
     return CGSizeMake(scale * (self.collectionView.frame.size.height),self.collectionView.frame.size.height);
 }
 
