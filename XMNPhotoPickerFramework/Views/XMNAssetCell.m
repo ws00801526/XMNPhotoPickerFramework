@@ -49,7 +49,6 @@
     }
     self.photoStateButton.selected = item.selected;
     self.photoImageView.image = item.thumbnail;
-
 }
 
 
