@@ -19,12 +19,24 @@
 #define iOS8Later ([UIDevice currentDevice].systemVersion.floatValue >= 8.0f)
 #define iOS9Later ([UIDevice currentDevice].systemVersion.floatValue >= 9.0f)
 
+/** collection中图片的间隔 */
 #define kXMNMargin 4
+
 #define kXMNThumbnailWidth ([UIScreen mainScreen].bounds.size.width - 2 * kXMNMargin - 4) / 4 - kXMNMargin
+
+/** collectionView中缩略图大小 */
 #define kXMNThumbnailSize CGSizeMake(kXMNThumbnailWidth, kXMNThumbnailWidth)
 
 /** 预览图片时 图片的间距 */
 #define kXMNPreviewPadding 16
+
+
+/** 是否允许 XMNPhotoPicker 手势滑动 发送图片 */
+#define kXMNGestureSendPictureEnabled  1
+/** 手势滑动发送图片的动画时间 */
+#define kXMNGestureSendPictureAnimationDuration .3f
+/** 通过此tag 可以获取originView上的imageView */
+#define kXMNGestureSendImageViewTag  999
 
 #define kXMNCamera 1
 #define kXMNPhotoLibrary 2

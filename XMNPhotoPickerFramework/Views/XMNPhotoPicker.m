@@ -20,9 +20,32 @@
 #import "UIView+Animations.h"
 #import "UIViewController+XMNPhotoHUD.h"
 
+/** 手势发送图片的状态 */
+typedef NS_ENUM(NSUInteger, XMNPhotoPickerSendState) {
+    
+    /** 即将发送图片，隐藏选择状态按钮 */
+    XMNPhotoPickerWillSend,
+    /** 手势发送完毕，不发送图片，显示状态按钮 */
+    XMNPhotoPickerUnSend,
+    /** 手势选择完毕，发送图片，显示状态按钮 */
+    XMNPhotoPickerSended,
+};
+
 @interface XMNPhotoPickerCell : UICollectionViewCell;
 
 @property (nonatomic, weak)   UIImageView *imageView;
+
+@property (nonatomic, strong) UIView *tempView;
+
+@property (nonatomic, weak)   UILabel *tempTipsLabel;
+@property (nonatomic, weak)   UIImageView *tempImageView;
+
+@property (nonatomic, assign) CGPoint startCenter;
+
+@property (nonatomic, weak, readonly)   UIWindow *keyWindow;
+
+
+@property (nonatomic, copy)   void(^sendAssetStateDidChange)(XMNPhotoPickerCell * _Nullable pickerCell, __weak UIView *originView, XMNPhotoPickerSendState state);
 
 
 @end
@@ -35,7 +58,19 @@
     if (self = [super initWithFrame:frame]) {
         NSLog(@"photopicker cell");
         UIImageView *imageView = [[UIImageView alloc] init];
+        imageView.backgroundColor = [UIColor darkGrayColor];
         [self.contentView addSubview:self.imageView = imageView];
+        
+#if kXMNGestureSendPictureEnabled == 1
+
+        UILongPressGestureRecognizer *longPressGes = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(_handleLongPress:)];
+        longPressGes.numberOfTouchesRequired =1;
+        longPressGes.minimumPressDuration = .3f;
+        [self.imageView addGestureRecognizer:longPressGes];
+        self.imageView.userInteractionEnabled = YES;
+        
+#endif
+
     }
     return self;
 }
@@ -44,6 +79,99 @@
     
     [super layoutSubviews];
     self.imageView.frame = self.contentView.bounds;
+}
+
+- (void)prepareForReuse {
+    
+    self.sendAssetStateDidChange = nil;
+}
+
+
+/// ========================================
+/// @name   Private Methods
+/// ========================================
+
+
+//
+- (void)_handleLongPress:(UILongPressGestureRecognizer *)longPressGes {
+    if (longPressGes.state == UIGestureRecognizerStateBegan) {
+        //开始手势,显示tempView,隐藏tipsLabel,photoImageView,photoStateButton
+        self.tempView.alpha = 1.f;
+        self.tempView.hidden = NO;
+        self.tempTipsLabel.hidden = YES;
+        
+        //记录起始center
+        self.startCenter = [self.imageView convertPoint:self.imageView.center toView:self.keyWindow];
+        CGRect startFrame = [self.imageView convertRect:self.imageView.frame toView:self.keyWindow];
+        [self.tempView setFrame:startFrame];
+        [self.tempImageView setFrame:CGRectMake(0, 0, startFrame.size.width, startFrame.size.height)];
+        self.tempImageView.image = self.imageView.image;
+        self.tempTipsLabel.center = CGPointMake(self.tempView.frame.size.width/2, 12);
+        [self.keyWindow addSubview:self.tempView];
+        
+        self.sendAssetStateDidChange ? self.sendAssetStateDidChange(self, self.tempView, XMNPhotoPickerWillSend) : nil;
+        
+    }else if (longPressGes.state == UIGestureRecognizerStateChanged) {
+        self.tempView.center = CGPointMake(self.tempView.center.x, MIN([longPressGes locationInView:self.keyWindow].y, self.startCenter.y));
+        CGRect convertRect = [self.superview convertRect:self.superview.frame toView:self.keyWindow];
+        if (CGRectContainsPoint(CGRectMake(0, convertRect.origin.y - self.tempView.bounds.size.height / 2, convertRect.size.width, convertRect.size.height + self.tempView.bounds.size.height / 2), self.tempView.center)) {
+
+            self.tempTipsLabel.alpha = .0f;
+            self.tempTipsLabel.hidden = YES;
+        }else {
+            self.tempTipsLabel.hidden = NO;
+            [UIView animateWithDuration:.25f animations:^{
+                self.tempTipsLabel.alpha = 1.f;
+            }];
+        }
+    }else {
+        if (!self.tempTipsLabel.hidden) {
+            self.tempTipsLabel.hidden = YES;
+            /** 确定发送图片 */
+            self.sendAssetStateDidChange ? self.sendAssetStateDidChange(self, self.tempView, XMNPhotoPickerSended) : nil;
+        }else {
+            
+            [UIView animateWithDuration:.25f delay:CGFLOAT_MIN options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction animations:^{
+                self.tempView.center = self.startCenter;
+            } completion:^(BOOL finished) {
+                self.startCenter = CGPointZero;
+                [self.tempView removeFromSuperview];
+                self.sendAssetStateDidChange ? self.sendAssetStateDidChange(self, self.tempView, XMNPhotoPickerSended) : nil;
+            }];
+        }
+    }
+}
+
+
+#pragma mark - Getter
+
+- (UIView *)keyWindow {
+    return [[UIApplication sharedApplication] keyWindow];
+}
+
+- (UIView *)tempView {
+    if (!_tempView) {
+        _tempView = [[UIView alloc] init];
+        _tempView.clipsToBounds = YES;
+        
+        UIImageView *imageView = [[UIImageView alloc] init];
+        imageView.layer.masksToBounds = YES;
+        imageView.tag = kXMNGestureSendImageViewTag;
+        [_tempView addSubview:self.tempImageView = imageView];
+        
+        UILabel *tipsLabel = [[UILabel alloc] init];
+        [tipsLabel setText:@"松开选择"];
+        tipsLabel.font = [UIFont systemFontOfSize:10.0f];
+        tipsLabel.backgroundColor = [UIColor darkGrayColor];
+        tipsLabel.textColor = [UIColor whiteColor];
+        tipsLabel.textAlignment = NSTextAlignmentCenter;
+        tipsLabel.hidden = YES;
+        tipsLabel.layer.cornerRadius = 10.0f;
+        tipsLabel.layer.masksToBounds = YES;
+        tipsLabel.frame = CGRectMake(0, 4, 55, 20);
+        [_tempView addSubview:self.tempTipsLabel = tipsLabel];
+    }
+    return _tempView;
 }
 
 @end
@@ -61,7 +189,6 @@
     
     if (self = [super initWithFrame:frame]) {
         
-        NSLog(@"XMNPhotoPickerReusableView");
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         [button setImage:[UIImage imageNamed:@"photo_state_normal"] forState:UIControlStateNormal];
         [button setImage:[UIImage imageNamed:@"photo_state_selected"] forState:UIControlStateSelected];
@@ -397,6 +524,53 @@
     
     XMNPhotoPickerCell *pickerCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"XMNPhotoPickerCell" forIndexPath:indexPath];
     pickerCell.imageView.image = self.assets[indexPath.row].previewImage;
+    
+#if kXMNGestureSendPictureEnabled == 1
+    __weak typeof(*&self) wSelf = self;
+    /** 配置手势发送图片功能 */
+    [pickerCell setSendAssetStateDidChange:^(XMNPhotoPickerCell * cell, UIView *originView, XMNPhotoPickerSendState state) {
+        
+        NSIndexPath *indexPath = [self.collectionView indexPathForCell:cell];
+        
+        XMNPhotoPickerReusableView *reusableView = (XMNPhotoPickerReusableView *)[self.collectionView supplementaryViewForElementKind:kXMNStickSupplementaryViewKind atIndexPath:indexPath];
+        if (self.assets.count > indexPath.row) {
+            switch (state) {
+                case XMNPhotoPickerSended:
+                {
+                    
+                    void(^completedBlock)() = ^{
+                        
+                        __strong typeof(*&wSelf) self = wSelf;
+                        cell.imageView.image = self.assets[indexPath.row].previewImage;
+                        cell.imageView.transform = CGAffineTransformMakeScale(.7f, .7f);
+                        originView.hidden = YES;
+                        [UIView animateWithDuration:.3f animations:^{
+                            cell.imageView.transform = CGAffineTransformIdentity;
+                        } completion:^(BOOL finished) {
+                            reusableView.button.hidden = NO;
+                        }];
+                    };
+                    
+                    self.didSendAsset ? self.didSendAsset(self.assets[indexPath.row], originView , completedBlock) : completedBlock();
+                }
+                    break;
+                case XMNPhotoPickerWillSend:
+                {
+                    reusableView.button.hidden = YES;
+                    cell.imageView.image = nil;
+                }
+                    break;
+                default:
+                {
+                    reusableView.button.hidden = NO;
+                    cell.imageView.image = self.assets[indexPath.row].previewImage;
+                }
+                    break;
+            }
+        }
+    }];
+
+#endif
     return pickerCell;
 }
 

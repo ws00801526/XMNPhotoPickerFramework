@@ -24,9 +24,6 @@
  */
 @property (nonatomic, copy, nullable)   void(^didChangeSelectedStateBlock)(BOOL selected, XMNAssetModel * _Nonnull asset);
 
-@property (nonatomic, copy, nullable)   void(^didSendAsset)(XMNAssetModel * _Nonnull asset, CGRect frame);
-
-
 /**
  *  具体的资源model
  */
