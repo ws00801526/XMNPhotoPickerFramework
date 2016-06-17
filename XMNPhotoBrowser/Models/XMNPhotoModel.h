@@ -37,6 +37,7 @@
                                  thumbnail:(UIImage * _Nullable )thumnail;
 
 
-+ (CGSize)adjustOriginSize:(CGSize)originSize toTargetSize:(CGSize)targetSize;
++ (CGSize)adjustOriginSize:(CGSize)originSize
+              toTargetSize:(CGSize)targetSize;
 
 @end

@@ -136,4 +136,11 @@
 - (void)getVideoInfoWithAsset:(id _Nonnull)asset
               completionBlock:(void(^ _Nonnull)(AVPlayerItem * _Nullable playerItem,NSDictionary * _Nullable playetItemInfo))completionBlock;
 
+
+
+#pragma mark - Class Methods
+
++ (CGSize)adjustOriginSize:(CGSize)originSize
+              toTargetSize:(CGSize)targetSize;
+
 @end

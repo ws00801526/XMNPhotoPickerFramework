@@ -49,20 +49,19 @@
 
 + (NSString *)_albumNameWithOriginName:(NSString *)name {
     
-    
-#ifdef iOS8Later
-    NSString *newName;
-    if ([name containsString:@"Roll"])         newName = @"相机胶卷";
-    else if ([name containsString:@"Stream"])  newName = @"我的照片流";
-    else if ([name containsString:@"Added"])   newName = @"最近添加";
-    else if ([name containsString:@"Selfies"]) newName = @"自拍";
-    else if ([name containsString:@"shots"])   newName = @"截屏";
-    else if ([name containsString:@"Videos"])  newName = @"视频";
-    else newName = name;
-    return newName;
-#else
-    return name;
-#endif
+    if (iOS8Later) {
+        NSString *newName;
+        if ([name containsString:@"Roll"])         newName = @"相机胶卷";
+        else if ([name containsString:@"Stream"])  newName = @"我的照片流";
+        else if ([name containsString:@"Added"])   newName = @"最近添加";
+        else if ([name containsString:@"Selfies"]) newName = @"自拍";
+        else if ([name containsString:@"shots"])   newName = @"截屏";
+        else if ([name containsString:@"Videos"])  newName = @"视频";
+        else newName = name;
+        return newName;
+    }else {
+        return name;
+    }
 }
 
 

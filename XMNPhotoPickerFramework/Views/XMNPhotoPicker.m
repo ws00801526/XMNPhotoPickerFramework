@@ -175,7 +175,9 @@
     }
 }
 
-- (void)showPhotoPickerwithController:(UIViewController *)controller animated:(BOOL)animated {
+- (void)showPhotoPickerwithController:(UIViewController *)controller
+                             animated:(BOOL)animated {
+    
     [self.selectedAssets removeAllObjects];
     [self.assets makeObjectsPerformSelector:@selector(setSelected:) withObject:@(NO)];
     [self updatePhotoLibraryButton];
@@ -310,6 +312,7 @@
 }
 
 - (void)showPhotoPickerController {
+    
     XMNPhotoPickerController *photoPickerController = [[XMNPhotoPickerController alloc] initWithMaxCount:self.maxCount delegate:nil];
     __weak typeof(*&self) wSelf = self;
     [photoPickerController setDidFinishPickingPhotosBlock:^(NSArray<UIImage *> *images, NSArray<XMNAssetModel *> *assets) {

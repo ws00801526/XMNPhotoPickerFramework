@@ -217,7 +217,6 @@
         self.albums = [NSArray arrayWithArray:albums];
         [self.tableView reloadData];
     }];
-    
 }
 
 

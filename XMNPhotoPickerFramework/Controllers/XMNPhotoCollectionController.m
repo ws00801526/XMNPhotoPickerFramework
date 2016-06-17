@@ -121,6 +121,7 @@ static NSString * const kXMNAssetCellIdentifier = @"XMNAssetCell";
 }
 
 - (void)_handleCancelAction {
+    
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
     XMNPhotoPickerController *photoPickerVC = (XMNPhotoPickerController *)self.navigationController;
     [photoPickerVC didCancelPickingPhoto];

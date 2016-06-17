@@ -106,6 +106,7 @@
 }
 
 - (UIImage *)previewImage {
+    
     if (_previewImage) {
         return _previewImage;
     }

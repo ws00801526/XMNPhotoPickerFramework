@@ -24,15 +24,17 @@
  */
 - (void)showAlertWithMessage:(NSString *)message {
     
-#ifdef iOS8Later
-    UIAlertController *alertC = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
-    [alertC addAction:action];
-    [self showDetailViewController:alertC sender:self];
-#else
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-    [alertView show];
-#endif
+
+    
+    if (iOS8Later) {
+        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
+        [alertC addAction:action];
+        [self showDetailViewController:alertC sender:self];
+    }else {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertView show];
+    }
 }
 
 

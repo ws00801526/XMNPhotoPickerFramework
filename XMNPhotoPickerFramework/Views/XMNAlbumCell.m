@@ -28,11 +28,27 @@
     self.titleLabel.attributedText = nameString;
     
     __weak typeof(*&self) wSelf = self;
-    [[XMNPhotoManager sharedManager] getThumbnailWithAsset:[item.fetchResult lastObject] size:kXMNThumbnailSize completionBlock:^(UIImage *image) {
-        __weak typeof(*&self) self = wSelf;
-        self.albumCoverImageView.image = image;
-    }];
-    
+
+    if (iOS8Later) {
+        [[XMNPhotoManager sharedManager] getThumbnailWithAsset:[item.fetchResult lastObject] size:kXMNThumbnailSize completionBlock:^(UIImage *image) {
+            __weak typeof(*&self) self = wSelf;
+            self.albumCoverImageView.image = image;
+        }];
+    }else {
+        ALAssetsGroup *assets = (ALAssetsGroup *)item.fetchResult;
+        
+        [assets enumerateAssetsWithOptions:NSEnumerationReverse usingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) {
+           
+            if (result) {
+                NSLog(@"this is last object :%@",result);
+                [[XMNPhotoManager sharedManager] getThumbnailWithAsset:result size:kXMNThumbnailSize completionBlock:^(UIImage *image) {
+                    __weak typeof(*&self) self = wSelf;
+                    self.albumCoverImageView.image = image;
+                }];
+                *stop =  YES;
+            }
+        }];
+    }
 }
 
 @end
