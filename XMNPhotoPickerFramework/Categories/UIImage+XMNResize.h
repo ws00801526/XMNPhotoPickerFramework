@@ -10,4 +10,6 @@
 
 @interface UIImage (XMNResize)
 
+- (UIImage *)xmn_resizeImageToSize:(CGSize)targetSize;
+
 @end
