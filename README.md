@@ -12,6 +12,8 @@
 
 1. 增加了一个基于[YYWebImage](https://github.com/ibireme/YYWebImage)框架封装的图片浏览器 **XMNPhotoBrowser** -- 强烈推荐学习下[ibireme](https://github.com/ibireme)大神的其他框架
 2. 修复iOS8以下崩溃bug
+3. 去除获取图片时，图片按照创建时间排序的功能
+4. 增加了类似QQ手势拖动发送图片功能
 
 ##### V1.0.3
 1. 修复了首次提示授权选择后 页面不更新问题
