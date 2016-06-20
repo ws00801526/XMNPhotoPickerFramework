@@ -33,7 +33,7 @@ static NSString * const kXMNPhotoBrowserCellIdentifier = @"com.XMFraker.XMNPhoto
     if (self = [super initWithCollectionViewLayout:[[self class] photoPreviewViewLayoutWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)]]) {
         
         _photos = [photos copy];
-        _firstBrowserItemIndex = NSIntegerMax;
+        _firstBrowserItemIndex = 0;
     }
     return self;
 }
@@ -206,7 +206,7 @@ static NSString * const kXMNPhotoBrowserCellIdentifier = @"com.XMFraker.XMNPhoto
     }
     _currentItemIndex = currentItemIndex;
     
-    if (self.firstBrowserItemIndex == NSIntegerMax) {
+    if ((self.firstBrowserItemIndex != _currentItemIndex) && self.firstBrowserItemIndex == 0) {
         self.firstBrowserItemIndex = currentItemIndex;
     }
 }
