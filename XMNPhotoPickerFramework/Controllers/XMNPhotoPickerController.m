@@ -13,6 +13,12 @@
 
 #import "XMNAlbumCell.h"
 
+@interface XMNAlbumListController ()
+
+- (void)loadAlbums;
+
+@end
+
 @interface XMNPhotoPickerController ()
 
 @end
@@ -65,7 +71,7 @@
     if ([XMNPhotoManager sharedManager].authorizationStatus == PHAuthorizationStatusNotDetermined) {
         //未决定是否授权 -> 启动定时器
         [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
-            
+
         }];
         [self performSelector:@selector(handleAuthorized) withObject:nil afterDelay:.1f];
         return;
@@ -74,11 +80,18 @@
     if ([[XMNPhotoManager sharedManager] hasAuthorized]) {
         //已授权
         [self autoPushPhotoCollectionViewController];
+        [self.viewControllers enumerateObjectsUsingBlock:^(__kindof UIViewController * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+           
+            if ([obj isKindOfClass:[XMNAlbumListController class]]) {
+                
+                [(XMNAlbumListController *)obj loadAlbums];
+                *stop =  YES;
+            }
+        }];
     }else {
         //未授权
         [self showUnAuthorizedTips];
     }
-    
 }
 
 /**
@@ -216,8 +229,23 @@
     self.tableView.rowHeight = 70.0f;
     [self.tableView registerNib:[UINib nibWithNibName:@"XMNAlbumCell" bundle:nil ] forCellReuseIdentifier:@"XMNAlbumCell"];
     
-    XMNPhotoPickerController *imagePickerVC = (XMNPhotoPickerController *)self.navigationController;
 
+    [self loadAlbums];
+}
+
+
+
+#pragma mark - XMNAlbumListController Methods
+
+/**
+ *  获取相册
+ */
+- (void)loadAlbums {
+    
+    if ([XMNPhotoManager sharedManager].authorizationStatus == PHAuthorizationStatusNotDetermined) {
+        return;
+    }
+    XMNPhotoPickerController *imagePickerVC = (XMNPhotoPickerController *)self.navigationController;
     __weak typeof(*&self) wSelf = self;
     [[XMNPhotoManager sharedManager] getAlbumsPickingVideoEnable:imagePickerVC.pickingVideoEnable completionBlock:^(NSArray<XMNAlbumModel *> *albums) {
         __strong typeof(*&wSelf) self = wSelf;
@@ -225,9 +253,6 @@
         [self.tableView reloadData];
     }];
 }
-
-
-#pragma mark - XMNAlbumListController Methods
 
 - (void)_handleCancelAction {
     
