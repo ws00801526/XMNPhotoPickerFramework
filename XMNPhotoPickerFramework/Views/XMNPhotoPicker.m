@@ -136,7 +136,7 @@ typedef NS_ENUM(NSUInteger, XMNPhotoPickerSendState) {
             } completion:^(BOOL finished) {
                 self.startCenter = CGPointZero;
                 [self.tempView removeFromSuperview];
-                self.sendAssetStateDidChange ? self.sendAssetStateDidChange(self, self.tempView, XMNPhotoPickerSended) : nil;
+                self.sendAssetStateDidChange ? self.sendAssetStateDidChange(self, self.tempView, XMNPhotoPickerUnSend) : nil;
             }];
         }
     }
@@ -361,9 +361,15 @@ typedef NS_ENUM(NSUInteger, XMNPhotoPickerSendState) {
 
 - (void)loadAssets {
     
+ 
+    if ([XMNPhotoManager sharedManager].authorizationStatus == PHAuthorizationStatusNotDetermined) {
+        [self performSelector:@selector(loadAssets) withObject:nil afterDelay:.1f];
+        return;
+    }
     __weak typeof(*&self) wSelf = self;
     self.loadingView.hidden = NO;
     [self.loadingView startAnimating];
+    
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         [[XMNPhotoManager sharedManager] getAlbumsPickingVideoEnable:YES completionBlock:^(NSArray<XMNAlbumModel *> *albums) {
             
@@ -421,11 +427,13 @@ typedef NS_ENUM(NSUInteger, XMNPhotoPickerSendState) {
             break;
         case kXMNCamera:
         {
+            [self hideAnimated:NO];
             [self showImageCameraController];
         }
             break;
         case kXMNPhotoLibrary:
         {
+            [self hideAnimated:NO];
             [self showPhotoPickerController];
         }
             break;
@@ -585,7 +593,14 @@ typedef NS_ENUM(NSUInteger, XMNPhotoPickerSendState) {
     }else if ([asset.asset isKindOfClass:[ALAsset class]]){
         size = [[asset.asset defaultRepresentation] dimensions];
     }
-    CGFloat scale = (MAX(0, size.width - 10))/size.height;
+    
+    /** 增加默认scale  防止size为CGSizeZero 导致的崩溃问题 */
+    CGFloat scale;
+    if (CGSizeEqualToSize(CGSizeZero, size)) {
+        scale = .5f;
+    }else {
+        scale = (MAX(0, size.width - 10))/size.height;
+    }
     return CGSizeMake(scale * (self.collectionView.frame.size.height),self.collectionView.frame.size.height);
 }
 
@@ -677,7 +692,6 @@ typedef NS_ENUM(NSUInteger, XMNPhotoPickerSendState) {
     self.didFinishPickingPhotosBlock ? self.didFinishPickingPhotosBlock(@[image], nil) : nil;
     [self.parentController dismissViewControllerAnimated:YES completion:nil];
     [self hideAnimated:YES];
-    
 }
 
 #pragma mark - PHPhotoLibraryChangeObserver
