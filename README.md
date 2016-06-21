@@ -32,7 +32,7 @@
 
 ### 1. 预览
 
-![最新V1.0.3版本](http://7xlt1j.com1.z0.glb.clouddn.com/XMNPhotoPickerFramework.gif)
+![最新V1.0.4版本](http://7xlt1j.com1.z0.glb.clouddn.com/XMNPhotoPickerFramework.gif)
 ![图片浏览器](http://7xlt1j.com1.z0.glb.clouddn.com/XMNPhotoPickerFramework_Browser.gif)
 
 ### 2. 功能
