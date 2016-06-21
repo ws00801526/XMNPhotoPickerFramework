@@ -40,14 +40,7 @@ CGFloat kXMNPhotoBrowserCellPadding = 16.f;
 }
 
 
-- (void)layoutSubviews {
-    
-    [super layoutSubviews];
-    [self resizeSubviews];
-}
-
 #pragma mark - Methods
-
 
 /// ========================================
 /// @name   Publis Methods
@@ -69,6 +62,7 @@ CGFloat kXMNPhotoBrowserCellPadding = 16.f;
     NSURL *URL = [NSURL URLWithString:item.imagePath];
     if (!URL) {
         self.imageView.image = item.thumbnail;
+        [self resizeSubviews];
         return;
     }
     
