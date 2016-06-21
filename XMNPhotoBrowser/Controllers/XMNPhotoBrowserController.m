@@ -20,6 +20,7 @@ static NSString * const kXMNPhotoBrowserCellIdentifier = @"com.XMFraker.XMNPhoto
 @property (nonatomic, copy)   NSArray<XMNPhotoModel *> *photos;
 
 @property (nonatomic, assign) NSInteger firstBrowserItemIndex;
+@property (nonatomic, assign) BOOL hasFirstBrowserItemIndex;
 
 
 @end
@@ -33,7 +34,7 @@ static NSString * const kXMNPhotoBrowserCellIdentifier = @"com.XMFraker.XMNPhoto
     if (self = [super initWithCollectionViewLayout:[[self class] photoPreviewViewLayoutWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)]]) {
         
         _photos = [photos copy];
-        _firstBrowserItemIndex = 0;
+        _currentItemIndex = _firstBrowserItemIndex = 0;
     }
     return self;
 }
@@ -50,7 +51,6 @@ static NSString * const kXMNPhotoBrowserCellIdentifier = @"com.XMFraker.XMNPhoto
     
     [self setupCollectionView];
     self.collectionView.frame = CGRectMake(0, 0, self.view.bounds.size.width + kXMNPhotoBrowserCellPadding, self.view.bounds.size.height);
-    
 }
 
 
@@ -79,9 +79,6 @@ static NSString * const kXMNPhotoBrowserCellIdentifier = @"com.XMFraker.XMNPhoto
     
     NSLog(@"%@  dealloc",NSStringFromClass([self class]));
 }
-
-
-
 
 /// ========================================
 /// @name   支持屏幕旋转功能
@@ -201,14 +198,14 @@ static NSString * const kXMNPhotoBrowserCellIdentifier = @"com.XMFraker.XMNPhoto
 
 - (void)setCurrentItemIndex:(NSInteger)currentItemIndex {
     
-    if (_currentItemIndex == currentItemIndex) {
-        return;
-    }
     _currentItemIndex = currentItemIndex;
     
-    if ((self.firstBrowserItemIndex != _currentItemIndex) && self.firstBrowserItemIndex == 0) {
-        self.firstBrowserItemIndex = currentItemIndex;
+    if (self.hasFirstBrowserItemIndex) {
+        return;
     }
+    
+    self.hasFirstBrowserItemIndex = YES;
+    self.firstBrowserItemIndex = currentItemIndex;
 }
 
 #pragma mark - Class Methods

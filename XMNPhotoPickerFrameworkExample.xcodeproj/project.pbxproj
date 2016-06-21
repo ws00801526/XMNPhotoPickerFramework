@@ -426,10 +426,10 @@
 		971039F51C631DFA00AC3B43 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				971039F61C631DFA00AC3B43 /* XMNPhotoCollectionController.h */,
-				971039F71C631DFA00AC3B43 /* XMNPhotoCollectionController.m */,
 				971039F81C631DFA00AC3B43 /* XMNPhotoPickerController.h */,
 				971039F91C631DFA00AC3B43 /* XMNPhotoPickerController.m */,
+				971039F61C631DFA00AC3B43 /* XMNPhotoCollectionController.h */,
+				971039F71C631DFA00AC3B43 /* XMNPhotoCollectionController.m */,
 				971039FA1C631DFA00AC3B43 /* XMNPhotoPreviewController.h */,
 				971039FB1C631DFA00AC3B43 /* XMNPhotoPreviewController.m */,
 				971039FC1C631DFA00AC3B43 /* XMNVideoPreviewController.h */,
