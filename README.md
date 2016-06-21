@@ -33,8 +33,7 @@
 ### 1. 预览
 
 ![最新V1.0.3版本](http://7xlt1j.com1.z0.glb.clouddn.com/XMNPhotoPickerFramework.gif)
-![](http://7xlt1j.com1.z0.glb.clouddn.com/XMNPhotoPickerKit-ShowController.gif)
-![](http://7xlt1j.com1.z0.glb.clouddn.com/XMNPhotoPickerKit-ShowPicker.gif)
+![图片浏览器](http://7xlt1j.com1.z0.glb.clouddn.com/XMNPhotoPickerFramework_Browser.gif)
 
 ### 2. 功能
 * 一款图片,视频选择类库
