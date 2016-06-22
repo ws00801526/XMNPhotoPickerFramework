@@ -22,6 +22,9 @@
 @property (nonatomic, copy)   NSArray<XMNAssetModel *> *assets;
 @property (nonatomic, strong) UICollectionView *collectionView;
 
+@property (nonatomic, strong) UIImageView *imageView;
+
+
 
 @end
 
@@ -37,7 +40,8 @@
     UIBarButtonItem *controllerItem =  [[UIBarButtonItem alloc] initWithTitle:@"Controller" style:UIBarButtonItemStylePlain target:self action:@selector(_handleButtonAction)];
     UIBarButtonItem *pickerItem = [[UIBarButtonItem alloc] initWithTitle:@"Picker" style:UIBarButtonItemStylePlain target:self action:@selector(_handlePickerAction)];
     self.navigationItem.rightBarButtonItems = @[controllerItem,pickerItem];
- 
+    
+    [self.view addSubview:self.imageView];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -182,8 +186,15 @@
     [[XMNPhotoPicker sharePhotoPicker] setDidFinishPickingPhotosBlock:^(NSArray<UIImage *> *images, NSArray<XMNAssetModel *> *assets) {
         __strong typeof(*&wSelf) self = wSelf;
         NSLog(@"picker images :%@ \n\n assets:%@",images,assets);
-        self.assets = [assets copy];
-        [self.collectionView reloadData];
+
+        if (!assets) {
+            self.imageView.hidden = NO;
+            self.imageView.image = [images firstObject];
+        }else {
+            self.imageView.hidden = YES;
+            self.assets = [assets copy];
+            [self.collectionView reloadData];
+        }
     }];
     //3. 设置选择完视频的block回调
     [[XMNPhotoPicker sharePhotoPicker] setDidFinishPickingVideoBlock:^(UIImage * image, XMNAssetModel *asset) {
@@ -196,6 +207,7 @@
     /** 添加手势发送图片功能 */
     [[XMNPhotoPicker sharePhotoPicker] setDidSendAsset:^(XMNAssetModel * _Nonnull asset, UIView * _Nonnull originView, void (^completedBlock)()) {
         
+        /** 使用kXMNGestureSendImageViewTag 可以获取拖动发送view中的imageView */
         UIImageView *imageView = (UIImageView *)[originView viewWithTag:kXMNGestureSendImageViewTag];
         completedBlock();
     }];
@@ -220,5 +232,16 @@
     return _collectionView;
 }
 
+
+- (UIImageView *)imageView {
+    
+    if (!_imageView) {
+        _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 300, 250)];
+        _imageView.contentMode = UIViewContentModeScaleAspectFill;
+        _imageView.center = CGPointMake(self.view.center.x, self.view.center.y - 150);
+        _imageView.hidden = YES;
+    }
+    return _imageView;
+}
 
 @end

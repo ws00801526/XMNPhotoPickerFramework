@@ -19,6 +19,10 @@
 /** 是否可以选择视频 默认YES */
 @property (nonatomic, assign) BOOL pickingVideoEnable;
 
+/** 拍照完成之后是否自动还原图片拍照尺寸 */
+@property (nonatomic, assign) BOOL autoFixImageOrientation;
+
+
 /** parentController,用来显示其他controller */
 @property (nonatomic, weak, nullable)   UIViewController *parentController;
 

@@ -17,6 +17,7 @@
 #import "XMNPhotoPickerDefines.h"
 #import "XMNPhotoStickLayout.h"
 
+#import "UIImage+XMNResize.h"
 #import "UIView+Animations.h"
 #import "UIViewController+XMNPhotoHUD.h"
 
@@ -240,6 +241,7 @@ typedef NS_ENUM(NSUInteger, XMNPhotoPickerSendState) {
         self.frame = [UIScreen mainScreen].bounds;
         [self setup];
         self.maxCount = maxCount ? : self.maxCount;
+        self.autoFixImageOrientation = YES;
     }
     return self;
 }
@@ -479,7 +481,7 @@ typedef NS_ENUM(NSUInteger, XMNPhotoPickerSendState) {
     UIImagePickerController *imagePickerC = [[UIImagePickerController alloc] init];
     imagePickerC.delegate = self;
     imagePickerC.allowsEditing = NO;
-    imagePickerC.videoQuality = UIImagePickerControllerQualityTypeLow;
+    imagePickerC.videoQuality = UIImagePickerControllerQualityTypeHigh;
     imagePickerC.sourceType = UIImagePickerControllerSourceTypeCamera;
     [self.parentController presentViewController:imagePickerC animated:YES completion:nil];
 }
@@ -689,6 +691,7 @@ typedef NS_ENUM(NSUInteger, XMNPhotoPickerSendState) {
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
 
     UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    self.autoFixImageOrientation ?  image = [image xmn_fixImageOrientation] : nil;
     self.didFinishPickingPhotosBlock ? self.didFinishPickingPhotosBlock(@[image], nil) : nil;
     [self.parentController dismissViewControllerAnimated:YES completion:nil];
     [self hideAnimated:YES];
