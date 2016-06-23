@@ -19,7 +19,7 @@
 /** 是否可以选择视频 默认YES */
 @property (nonatomic, assign) BOOL pickingVideoEnable;
 
-/** 拍照完成之后是否自动还原图片拍照尺寸 */
+/** 拍照完成之后是否自动旋转  默认YES */
 @property (nonatomic, assign) BOOL autoFixImageOrientation;
 
 
