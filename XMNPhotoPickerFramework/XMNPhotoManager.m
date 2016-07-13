@@ -67,9 +67,10 @@
     NSMutableArray *albumArr = [NSMutableArray array];
     if (iOS8Later) {
         
-
+        //option  的 mediaType 这种过滤 ，只能针对图片 ，针对相册的谓词过滤 只能是相册相关的 PHAssetCollectionSubtype 等 。
+        // 所以当选择视频的时候会崩溃
         PHFetchOptions *option = [[PHFetchOptions alloc] init];
-        if (!pickingVideoEnable) option.predicate = [NSPredicate predicateWithFormat:@"mediaType == %ld", PHAssetMediaTypeImage];
+        //if (!pickingVideoEnable) option.predicate = [NSPredicate predicateWithFormat:@"mediaType == %ld", PHAssetMediaTypeImage];
         
         /** 获取只能相册，过滤其中图片为0的 */
         PHFetchResult *smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAny options:option];
@@ -77,6 +78,10 @@
         PHFetchResult *albums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeAny options:option];
     
         [smartAlbums enumerateObjectsUsingBlock:^(PHAssetCollection *collection  , NSUInteger idx, BOOL * _Nonnull stop) {
+            
+            PHFetchOptions *option = [[PHFetchOptions alloc] init];
+            if (!pickingVideoEnable) option.predicate = [NSPredicate predicateWithFormat:@"mediaType = %ld", PHAssetMediaTypeImage];
+            // 针对 PHAsset 的谓词过滤才可以使用 mediaType
             PHFetchResult *fetchResult = [PHAsset fetchAssetsInAssetCollection:collection options:option];
             if (fetchResult.count > 0 && ![[collection.localizedTitle lowercaseString] containsString:@"delegate"]) {
                 if ([collection.localizedTitle isEqualToString:@"Camera Roll"]) {
@@ -88,6 +93,9 @@
         }];
         
         for (PHAssetCollection *collection in albums) {
+            if (!pickingVideoEnable) option.predicate = [NSPredicate predicateWithFormat:@"mediaType = %ld", PHAssetMediaTypeImage];
+            // 针对 PHAsset 的谓词过滤才可以使用 mediaType
+
             PHFetchResult *fetchResult = [PHAsset fetchAssetsInAssetCollection:collection options:option];
             if (fetchResult.count < 1) continue;
             if ([collection.localizedTitle isEqualToString:@"My Photo Stream"]) {
