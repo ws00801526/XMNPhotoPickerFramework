@@ -34,15 +34,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6U2-w6-q0g">
-                                <rect key="frame" x="131" y="224" width="46" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6U2-w6-q0g">
+                                <rect key="frame" x="126" y="319" width="68" height="30"/>
                                 <state key="normal" title="Controller"/>
                                 <connections>
                                     <action selector="_handleButtonAction" destination="DeO-zN-gha" eventType="touchUpInside" id="Hsl-pd-Hxu"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7yw-ht-uCe">
-                                <rect key="frame" x="131" y="289" width="46" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7yw-ht-uCe">
+                                <rect key="frame" x="138.5" y="384" width="43" height="30"/>
                                 <state key="normal" title="Picker"/>
                                 <connections>
                                     <action selector="_handlePickerAction" destination="DeO-zN-gha" eventType="touchUpInside" id="B18-TQ-n4W"/>
@@ -52,7 +52,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="7yw-ht-uCe" firstAttribute="top" secondItem="6U2-w6-q0g" secondAttribute="bottom" constant="35" id="8tr-1X-RPs"/>
-                            <constraint firstItem="6U2-w6-q0g" firstAttribute="centerY" secondItem="oty-aC-9MX" secondAttribute="centerY" id="GEY-Qv-4LE"/>
+                            <constraint firstItem="6U2-w6-q0g" firstAttribute="centerY" secondItem="oty-aC-9MX" secondAttribute="centerY" constant="50" id="GEY-Qv-4LE"/>
                             <constraint firstItem="6U2-w6-q0g" firstAttribute="centerX" secondItem="oty-aC-9MX" secondAttribute="centerX" id="SHx-Px-HiV"/>
                             <constraint firstItem="7yw-ht-uCe" firstAttribute="centerX" secondItem="oty-aC-9MX" secondAttribute="centerX" id="iqQ-H9-cTh"/>
                         </constraints>
@@ -61,7 +61,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kCw-1i-KEo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-421" y="-370"/>
+            <point key="canvasLocation" x="-558" y="-366"/>
         </scene>
     </scenes>
 </document>
