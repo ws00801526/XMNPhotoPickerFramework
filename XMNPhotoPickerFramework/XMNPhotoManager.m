@@ -67,20 +67,28 @@
     NSMutableArray *albumArr = [NSMutableArray array];
     if (iOS8Later) {
         
-        //option  的 mediaType 这种过滤 ，只能针对图片 ，针对相册的谓词过滤 只能是相册相关的 PHAssetCollectionSubtype 等 。
-        // 所以当选择视频的时候会崩溃
-        PHFetchOptions *option = [[PHFetchOptions alloc] init];
-        //if (!pickingVideoEnable) option.predicate = [NSPredicate predicateWithFormat:@"mediaType == %ld", PHAssetMediaTypeImage];
-        
+        /** 根据github @suyongmaozhao(https://github.com/suyongmaozhao) 指出
+         *  获取相册时的谓词过滤 只能过滤 相册相关属性, PHAssetCollectionSubtype等
+         *  获取相册内资源时   可以过滤资源相关属性  , PHAssetMediaTypeImage等
+         *  此处需要注意
+         * */
+
+        /** 根据github @suyongmaozhao 兄弟的意见,获取相册时不进行过滤 */
         /** 获取只能相册，过滤其中图片为0的 */
-        PHFetchResult *smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAny options:option];
+        PHFetchResult *smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAny options:nil];
         /** 获取普通相册，过滤其中图片为0的 */
-        PHFetchResult *albums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeAny options:option];
+        PHFetchResult *albums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeAny options:nil];
     
         [smartAlbums enumerateObjectsUsingBlock:^(PHAssetCollection *collection  , NSUInteger idx, BOOL * _Nonnull stop) {
             
+            /** 修改pickingVideoEnable功能为 只选择视频 */
             PHFetchOptions *option = [[PHFetchOptions alloc] init];
-            if (!pickingVideoEnable) option.predicate = [NSPredicate predicateWithFormat:@"mediaType = %ld", PHAssetMediaTypeImage];
+            if (!pickingVideoEnable) {
+                option.predicate = [NSPredicate predicateWithFormat:@"mediaType = %ld", PHAssetMediaTypeImage];
+            }else {
+                option.predicate = [NSPredicate predicateWithFormat:@"mediaType = %ld", PHAssetMediaTypeVideo];
+            }
+            
             // 针对 PHAsset 的谓词过滤才可以使用 mediaType
             PHFetchResult *fetchResult = [PHAsset fetchAssetsInAssetCollection:collection options:option];
             if (fetchResult.count > 0 && ![[collection.localizedTitle lowercaseString] containsString:@"delegate"]) {
@@ -93,8 +101,14 @@
         }];
         
         for (PHAssetCollection *collection in albums) {
-            if (!pickingVideoEnable) option.predicate = [NSPredicate predicateWithFormat:@"mediaType = %ld", PHAssetMediaTypeImage];
-            // 针对 PHAsset 的谓词过滤才可以使用 mediaType
+
+            /** 修改pickingVideoEnable功能为 只选择视频 */
+            PHFetchOptions *option = [[PHFetchOptions alloc] init];
+            if (!pickingVideoEnable) {
+                option.predicate = [NSPredicate predicateWithFormat:@"mediaType = %ld", PHAssetMediaTypeImage];
+            }else {
+                option.predicate = [NSPredicate predicateWithFormat:@"mediaType = %ld", PHAssetMediaTypeVideo];
+            }
 
             PHFetchResult *fetchResult = [PHAsset fetchAssetsInAssetCollection:collection options:option];
             if (fetchResult.count < 1) continue;
