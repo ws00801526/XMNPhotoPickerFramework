@@ -320,6 +320,7 @@ typedef NS_ENUM(NSUInteger, XMNPhotoPickerSendState) {
 
 - (void)setup {
     
+    self.pickingVideoEnable = NO;
     self.maxPreviewCount = 20;
     self.maxCount = MIN(self.maxPreviewCount, NSUIntegerMax);
     
@@ -373,12 +374,12 @@ typedef NS_ENUM(NSUInteger, XMNPhotoPickerSendState) {
     [self.loadingView startAnimating];
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        [[XMNPhotoManager sharedManager] getAlbumsPickingVideoEnable:YES completionBlock:^(NSArray<XMNAlbumModel *> *albums) {
+        [[XMNPhotoManager sharedManager] getAlbumsPickingVideoEnable:self.pickingVideoEnable completionBlock:^(NSArray<XMNAlbumModel *> *albums) {
             
             __strong typeof(*&wSelf) self = wSelf;
             if (albums && [albums firstObject]) {
                 self.displayAlbum = [albums firstObject];
-                [[XMNPhotoManager sharedManager] getAssetsFromResult:[[albums firstObject] fetchResult] pickingVideoEnable:YES completionBlock:^(NSArray<XMNAssetModel *> *assets) {
+                [[XMNPhotoManager sharedManager] getAssetsFromResult:[[albums firstObject] fetchResult] pickingVideoEnable:self.pickingVideoEnable completionBlock:^(NSArray<XMNAssetModel *> *assets) {
                     __weak typeof(*&self) self = wSelf;
                     NSMutableArray *tempAssets = [NSMutableArray array];
                     [assets enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(XMNAssetModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -712,7 +713,7 @@ typedef NS_ENUM(NSUInteger, XMNPhotoPickerSendState) {
             XMNAlbumModel *changeAlbumModel = [XMNAlbumModel albumWithResult:collectionChanges.fetchResultAfterChanges name:@"afterChange"];
             self.displayAlbum = changeAlbumModel;
             if (collectionChanges.hasIncrementalChanges)  {
-                [[XMNPhotoManager sharedManager] getAssetsFromResult:self.displayAlbum.fetchResult pickingVideoEnable:YES completionBlock:^(NSArray<XMNAssetModel *> *assets) {
+                [[XMNPhotoManager sharedManager] getAssetsFromResult:self.displayAlbum.fetchResult pickingVideoEnable:self.pickingVideoEnable completionBlock:^(NSArray<XMNAssetModel *> *assets) {
                     __weak typeof(*&self) self = wSelf;
                     NSMutableArray *tempAssets = [NSMutableArray array];
                     [assets enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(XMNAssetModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {

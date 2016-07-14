@@ -16,7 +16,11 @@
 @property (nonatomic, assign) NSUInteger maxCount;
 /** 最大预览图数量 默认20 */
 @property (nonatomic, assign) NSUInteger maxPreviewCount;
-/** 是否可以选择视频 默认YES */
+
+/**
+ *  !!! 此属性修改为是否选择视频, 默认视频,图片不能同时选择
+ *  默认为NO
+ **/
 @property (nonatomic, assign) BOOL pickingVideoEnable;
 
 /** 拍照完成之后是否自动旋转  默认YES */
