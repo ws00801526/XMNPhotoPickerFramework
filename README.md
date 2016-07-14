@@ -14,6 +14,8 @@
 2. 修复iOS8以下崩溃bug
 3. 去除获取图片时，图片按照创建时间排序的功能
 4. 增加了类似QQ手势拖动发送图片功能
+5. 2016-07-14 修复pickingVideoEnable属性  区分是否选择图片,或者视频
+6. 修复选择视频时 谓词过滤崩溃bug 感谢[suyongmaozhao](https://github.com/suyongmaozhao)
 
 ##### V1.0.3
 1. 修复了首次提示授权选择后 页面不更新问题
