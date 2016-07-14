@@ -38,7 +38,7 @@
         _photoPickerDelegate = delegate;
         _maxCount = maxCount ? : NSUIntegerMax;
         _autoPushToPhotoCollection = YES;
-        _pickingVideoEnable = YES;
+        _pickingVideoEnable = NO;
     }
     return self;
 }
