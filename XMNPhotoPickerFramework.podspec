@@ -1,8 +1,8 @@
 Pod::Spec.new do |s|
   s.name         = "XMNPhotoPickerFramework"
-  s.version      = "1.0.3"
+  s.version      = "1.0.4"
   s.summary      = "模仿微信选择图片类库"
-  s.description  = "模仿微信选择图片类库 - V1.0.3版本 增加了类似QQ的stick功能 修复部分的内存问题"
+  s.description  = "模仿微信选择图片类库 - V1.0.4版本 增加了类似QQ的stick功能 修复部分的内存问题 修复bug"
   s.homepage     = "https://github.com/ws00801526/XMNPhotoPickerFramework"
   s.license      = "MIT"
   s.author       = { "XMFraker" => "3057600441@qq.com" }  
