@@ -12,6 +12,35 @@
 #import <XMNPhotoBrowser/XMNPhotoBrowser.h>
 
 
+@interface XMNTestAssetCell : UICollectionViewCell
+
+@property (weak, nonatomic)   UIImageView *imageView;
+
+
+@end
+
+@implementation XMNTestAssetCell
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    
+    if (self = [super initWithFrame:frame]) {
+        
+        UIImageView *imageView = [[UIImageView alloc] init];
+        imageView.contentMode = UIViewContentModeScaleAspectFill;
+        imageView.clipsToBounds = YES;
+        [self.contentView addSubview:self.imageView = imageView];
+    }
+    return self;
+}
+
+- (void)layoutSubviews {
+    
+    [super layoutSubviews];
+    self.imageView.frame = self.contentView.bounds;
+}
+
+@end
+
 @interface ViewController () <UICollectionViewDataSource,UICollectionViewDelegate>
 
 @property (nonatomic, copy)   NSArray<XMNAssetModel *> *assets;
@@ -55,9 +84,9 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    XMNAssetCell *assetCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"XMNAssetCell" forIndexPath:indexPath];
+    XMNTestAssetCell *assetCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"XMNTestAssetCell" forIndexPath:indexPath];
     assetCell.contentView.backgroundColor = [UIColor greenColor];
-    [assetCell configCellWithItem:self.assets[indexPath.row]];
+    assetCell.imageView.image = self.assets[indexPath.row].thumbnail;
     return assetCell;
 }
 
@@ -120,7 +149,7 @@
     // 设置第一张预览图片位置  默认0
     browserC.currentItemIndex = indexPath.row;
     // 设置 预览的sourceView
-    browserC.sourceView = [[collectionView cellForItemAtIndexPath:indexPath] valueForKey:@"photoImageView"];
+    browserC.sourceView = [[collectionView cellForItemAtIndexPath:indexPath] valueForKey:@"imageView"];
     // 使用presentVC方式 弹出
     [self presentViewController:browserC animated:YES completion:nil];
 }
@@ -221,8 +250,7 @@
         _collectionView.contentInset = UIEdgeInsetsMake(8, 8, 8, 8);
         _collectionView.dataSource = self;
         _collectionView.delegate = self;
-        [_collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"CollectionCell"];
-        [_collectionView registerNib:[UINib nibWithNibName:@"XMNAssetCell" bundle:nil] forCellWithReuseIdentifier:@"XMNAssetCell"];
+        [_collectionView registerClass:[XMNTestAssetCell class] forCellWithReuseIdentifier:@"XMNTestAssetCell"];
     }
     return _collectionView;
 }

@@ -144,7 +144,7 @@
 
 - (void)_pausePlayer {
     
-    [self.playButton setImage:[UIImage imageNamed:@"video_preview_play_normal"] forState:UIControlStateNormal];
+    [self.playButton setImage:[UIImage imageWithContentsOfFile:[[XMNPhotoPickerOption resourceBundle] pathForResource:@"video_preview_play_normal@2x" ofType:@"png"]] forState:UIControlStateNormal];
     [self.player pause];
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     [UIView animateWithDuration:.2 animations:^{
@@ -186,13 +186,12 @@
         [_topBar addSubview:label];
         
         UIButton *backButton  = [UIButton buttonWithType:UIButtonTypeCustom];
-        [backButton setImage:[UIImage imageNamed:@"navigation_back"] forState:UIControlStateNormal];
+        [backButton setImage:[UIImage imageWithContentsOfFile:[[XMNPhotoPickerOption resourceBundle] pathForResource:@"navigation_back@2x" ofType:@"png"]] forState:UIControlStateNormal];
         [backButton setContentEdgeInsets:UIEdgeInsetsMake(0, 10, 0, 10)];
         [backButton sizeToFit];
         backButton.frame = CGRectMake(12, _topBar.frame.size.height/2 - backButton.frame.size.height/2 + originY/2, backButton.frame.size.width, backButton.frame.size.height);
         [backButton addTarget:self action:@selector(_handleBackAction) forControlEvents:UIControlEventTouchUpInside];
         [_topBar addSubview:backButton];
-        
     }
     return _topBar;
 }

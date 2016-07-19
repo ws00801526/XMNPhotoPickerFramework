@@ -19,7 +19,6 @@ FOUNDATION_EXPORT const unsigned char XMNPhotoPickerVersionString[];
 #if __has_include(<XMNPhotoPicker/XMNPhotoPicker.h>)
 
     #import <XMNPhotoPicker/XMNAssetModel.h>
-    #import <XMNPhotoPicker/XMNAssetCell.h>
     #import <XMNPhotoPicker/XMNPhotoManager.h>
     #import <XMNPhotoPicker/XMNPhotoPickerSheet.h>
     #import <XMNPhotoPicker/XMNPhotoPickerController.h>
@@ -28,7 +27,6 @@ FOUNDATION_EXPORT const unsigned char XMNPhotoPickerVersionString[];
 
     #import "XMNPhotoPickerOption.h"
     #import "XMNAssetModel.h"
-    #import "XMNAssetCell.h"
     #import "XMNPhotoManager.h"
     #import "XMNPhotoPickerSheet.h"
     #import "XMNPhotoPickerController.h"

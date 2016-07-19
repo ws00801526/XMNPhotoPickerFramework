@@ -29,7 +29,7 @@
 		9739ADC51D3DBE27006CC994 /* XMNAlbumCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 9739AD9E1D3DBE27006CC994 /* XMNAlbumCell.h */; };
 		9739ADC61D3DBE27006CC994 /* XMNAlbumCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9739AD9F1D3DBE27006CC994 /* XMNAlbumCell.m */; };
 		9739ADC71D3DBE27006CC994 /* XMNAlbumCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9739ADA01D3DBE27006CC994 /* XMNAlbumCell.xib */; };
-		9739ADC81D3DBE27006CC994 /* XMNAssetCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 9739ADA11D3DBE27006CC994 /* XMNAssetCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9739ADC81D3DBE27006CC994 /* XMNAssetCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 9739ADA11D3DBE27006CC994 /* XMNAssetCell.h */; };
 		9739ADC91D3DBE27006CC994 /* XMNAssetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9739ADA21D3DBE27006CC994 /* XMNAssetCell.m */; };
 		9739ADCA1D3DBE27006CC994 /* XMNAssetCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9739ADA31D3DBE27006CC994 /* XMNAssetCell.xib */; };
 		9739ADCB1D3DBE27006CC994 /* XMNBottomBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 9739ADA41D3DBE27006CC994 /* XMNBottomBar.h */; };
