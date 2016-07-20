@@ -152,12 +152,10 @@ static NSString * const kXMNPhotoPreviewIdentifier = @"XMNPhotoPreviewCell";
 
 #pragma mark - UIScrollViewDelegate
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    CGPoint offSet = scrollView.contentOffset;
-    self.currentIndex = offSet.x / self.view.frame.size.width;
-}
-
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    
+    CGPoint offSet = scrollView.contentOffset;
+    self.currentIndex = offSet.x / (self.view.frame.size.width + [XMNPhotoPickerOption previewPadding]);
     [self _updateTopBarStatus];
 }
 

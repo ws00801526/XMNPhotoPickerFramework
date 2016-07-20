@@ -98,11 +98,7 @@
             // 针对 PHAsset 的谓词过滤才可以使用 mediaType
             PHFetchResult *fetchResult = [PHAsset fetchAssetsInAssetCollection:collection options:option];
             if (fetchResult.count > 0 && ![[collection.localizedTitle lowercaseString] containsString:@"delegate"]) {
-                if ([collection.localizedTitle isEqualToString:@"Camera Roll"]) {
-                    [albumArr insertObject:[XMNAlbumModel albumWithResult:[fetchResult copy] name:[collection.localizedTitle copy]] atIndex:0];
-                } else {
-                    [albumArr addObject:[XMNAlbumModel albumWithResult:[fetchResult copy] name:[collection.localizedTitle copy]]];
-                }
+                [albumArr addObject:[XMNAlbumModel albumWithResult:[fetchResult copy] name:[collection.localizedTitle copy]]];
             }
         }];
         
