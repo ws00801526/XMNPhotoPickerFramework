@@ -63,12 +63,16 @@ static NSString * const kXMNAssetCellIdentifier = @"XMNAssetCell";
     [[XMNPhotoManager sharedManager] getAssetsFromResult:self.album.fetchResult pickingVideoEnable:[(XMNPhotoPickerController *)self.navigationController pickingVideoEnable] completionBlock:^(NSArray<XMNAssetModel *> *assets) {
         __weak typeof(*&self) self = wSelf;
         self.assets = [NSArray arrayWithArray:assets];
-        dispatch_async(dispatch_get_global_queue(0, 0), ^{
-            __weak typeof(*&self) self = wSelf;
-           [self.assets enumerateObjectsUsingBlock:^(XMNAssetModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-               [obj thumbnail];
-           }];
-        });
+        
+//        [[self.assets subarrayWithRange:NSMakeRange(self.assets.count - 40, 40)] enumerateObjectsUsingBlock:^(XMNAssetModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//            [obj thumbnail];
+//        }];
+//        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+//            __weak typeof(*&self) self = wSelf;
+//           [self.assets enumerateObjectsUsingBlock:^(XMNAssetModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//               [obj thumbnail];
+//           }];
+//        });
         [self.collectionView reloadData];
     }];
     
@@ -91,6 +95,7 @@ static NSString * const kXMNAssetCellIdentifier = @"XMNAssetCell";
 }
 
 - (void)dealloc {
+    
     NSLog(@"photo collection dealloc ");
 }
 
