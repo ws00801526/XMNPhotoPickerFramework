@@ -394,12 +394,16 @@ typedef NS_ENUM(NSUInteger, XMNPhotoPickerSendState) {
                         *stop = (tempAssets.count > self.maxPreviewCount);
                     }];
                     self.assets = [NSArray arrayWithArray:tempAssets];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        __weak typeof(*&self) self = wSelf;
-                        self.loadingView.hidden = YES;
-                        [self.loadingView stopAnimating];
-                        [self.collectionView reloadData];
+                    /** 卡顿应该是此处 初始化造成的,先放到子线程里面去做 */
+                    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                        __strong typeof(*&wSelf) self = wSelf;
                         [(XMNPhotoStickLayout *)self.collectionView.collectionViewLayout updateAllAttributes];
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            __strong typeof(*&wSelf) self = wSelf;
+                            [self.collectionView reloadData];
+                            self.loadingView.hidden = YES;
+                            [self.loadingView stopAnimating];
+                        });
                     });
                 }];
             }
