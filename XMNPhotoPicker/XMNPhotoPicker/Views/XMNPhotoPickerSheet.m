@@ -150,6 +150,7 @@ typedef NS_ENUM(NSUInteger, XMNPhotoPickerSendState) {
 #pragma mark - Getter
 
 - (UIView *)keyWindow {
+    
     return [[UIApplication sharedApplication] keyWindow];
 }
 
@@ -253,6 +254,7 @@ typedef NS_ENUM(NSUInteger, XMNPhotoPickerSendState) {
 
 - (void)awakeFromNib {
     
+    [super awakeFromNib];
     self.frame = [UIScreen mainScreen].bounds;
     [self layoutIfNeeded];
 }

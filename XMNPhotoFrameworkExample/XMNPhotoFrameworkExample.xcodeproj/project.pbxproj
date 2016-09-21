@@ -7,27 +7,28 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9739AE601D3DBFF3006CC994 /* XMNPhotoBrowser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9739AE5F1D3DBFF3006CC994 /* XMNPhotoBrowser.framework */; };
-		9739AE611D3DBFF3006CC994 /* XMNPhotoBrowser.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9739AE5F1D3DBFF3006CC994 /* XMNPhotoBrowser.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		9739AE671D3DC4D8006CC994 /* XMNPhotoPicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9739AE661D3DC4D8006CC994 /* XMNPhotoPicker.framework */; };
-		9739AE681D3DC4D8006CC994 /* XMNPhotoPicker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9739AE661D3DC4D8006CC994 /* XMNPhotoPicker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		975A73A81D3DBD4800CAC950 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 975A73A71D3DBD4800CAC950 /* main.m */; };
 		975A73AB1D3DBD4800CAC950 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 975A73AA1D3DBD4800CAC950 /* AppDelegate.m */; };
 		975A73AE1D3DBD4800CAC950 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 975A73AD1D3DBD4800CAC950 /* ViewController.m */; };
 		975A73B11D3DBD4800CAC950 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 975A73AF1D3DBD4800CAC950 /* Main.storyboard */; };
 		975A73B31D3DBD4800CAC950 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 975A73B21D3DBD4800CAC950 /* Assets.xcassets */; };
 		975A73B61D3DBD4800CAC950 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 975A73B41D3DBD4800CAC950 /* LaunchScreen.storyboard */; };
+		975E92051D616AE6002CE556 /* menu.gif in Resources */ = {isa = PBXBuildFile; fileRef = 975E92041D616AE6002CE556 /* menu.gif */; };
+		97E7B2AB1D924F3A00DE2F25 /* XMNPhotoBrowser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97E7B2AA1D924F3A00DE2F25 /* XMNPhotoBrowser.framework */; };
+		97E7B2AC1D924F3A00DE2F25 /* XMNPhotoBrowser.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 97E7B2AA1D924F3A00DE2F25 /* XMNPhotoBrowser.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		97E7B2AE1D924F3A00DE2F25 /* XMNPhotoPicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97E7B2AD1D924F3A00DE2F25 /* XMNPhotoPicker.framework */; };
+		97E7B2AF1D924F3A00DE2F25 /* XMNPhotoPicker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 97E7B2AD1D924F3A00DE2F25 /* XMNPhotoPicker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		9739AE651D3DBFF4006CC994 /* Embed Frameworks */ = {
+		97E7B2A91D924F1300DE2F25 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				9739AE611D3DBFF3006CC994 /* XMNPhotoBrowser.framework in Embed Frameworks */,
-				9739AE681D3DC4D8006CC994 /* XMNPhotoPicker.framework in Embed Frameworks */,
+				97E7B2AC1D924F3A00DE2F25 /* XMNPhotoBrowser.framework in Embed Frameworks */,
+				97E7B2AF1D924F3A00DE2F25 /* XMNPhotoPicker.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -35,8 +36,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		9739AE5F1D3DBFF3006CC994 /* XMNPhotoBrowser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = XMNPhotoBrowser.framework; path = "/Users/XMFraker/Library/Developer/Xcode/DerivedData/XMNPhotoFramework-cyjgejrekdhwpydtzdggfunepgio/Build/Products/Debug-iphonesimulator/XMNPhotoBrowser.framework"; sourceTree = "<absolute>"; };
-		9739AE661D3DC4D8006CC994 /* XMNPhotoPicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = XMNPhotoPicker.framework; path = "/Users/XMFraker/Library/Developer/Xcode/DerivedData/XMNPhotoFramework-cyjgejrekdhwpydtzdggfunepgio/Build/Products/Debug-iphonesimulator/XMNPhotoPicker.framework"; sourceTree = "<absolute>"; };
 		975A73A31D3DBD4800CAC950 /* XMNPhotoFrameworkExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XMNPhotoFrameworkExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		975A73A71D3DBD4800CAC950 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		975A73A91D3DBD4800CAC950 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -47,6 +46,9 @@
 		975A73B21D3DBD4800CAC950 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		975A73B51D3DBD4800CAC950 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		975A73B71D3DBD4800CAC950 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		975E92041D616AE6002CE556 /* menu.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = menu.gif; sourceTree = "<group>"; };
+		97E7B2AA1D924F3A00DE2F25 /* XMNPhotoBrowser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = XMNPhotoBrowser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		97E7B2AD1D924F3A00DE2F25 /* XMNPhotoPicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = XMNPhotoPicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,8 +56,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9739AE601D3DBFF3006CC994 /* XMNPhotoBrowser.framework in Frameworks */,
-				9739AE671D3DC4D8006CC994 /* XMNPhotoPicker.framework in Frameworks */,
+				97E7B2AB1D924F3A00DE2F25 /* XMNPhotoBrowser.framework in Frameworks */,
+				97E7B2AE1D924F3A00DE2F25 /* XMNPhotoPicker.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,8 +67,8 @@
 		975A739A1D3DBD4800CAC950 = {
 			isa = PBXGroup;
 			children = (
-				9739AE661D3DC4D8006CC994 /* XMNPhotoPicker.framework */,
-				9739AE5F1D3DBFF3006CC994 /* XMNPhotoBrowser.framework */,
+				97E7B2AD1D924F3A00DE2F25 /* XMNPhotoPicker.framework */,
+				97E7B2AA1D924F3A00DE2F25 /* XMNPhotoBrowser.framework */,
 				975A73A51D3DBD4800CAC950 /* XMNPhotoFrameworkExample */,
 				975A73A41D3DBD4800CAC950 /* Products */,
 			);
@@ -87,6 +89,7 @@
 				975A73AA1D3DBD4800CAC950 /* AppDelegate.m */,
 				975A73AC1D3DBD4800CAC950 /* ViewController.h */,
 				975A73AD1D3DBD4800CAC950 /* ViewController.m */,
+				975E92041D616AE6002CE556 /* menu.gif */,
 				975A73AF1D3DBD4800CAC950 /* Main.storyboard */,
 				975A73B21D3DBD4800CAC950 /* Assets.xcassets */,
 				975A73B41D3DBD4800CAC950 /* LaunchScreen.storyboard */,
@@ -114,7 +117,7 @@
 				975A739F1D3DBD4800CAC950 /* Sources */,
 				975A73A01D3DBD4800CAC950 /* Frameworks */,
 				975A73A11D3DBD4800CAC950 /* Resources */,
-				9739AE651D3DBFF4006CC994 /* Embed Frameworks */,
+				97E7B2A91D924F1300DE2F25 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -136,6 +139,7 @@
 				TargetAttributes = {
 					975A73A21D3DBD4800CAC950 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = N9G92VG962;
 					};
 				};
 			};
@@ -163,6 +167,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				975A73B61D3DBD4800CAC950 /* LaunchScreen.storyboard in Resources */,
+				975E92051D616AE6002CE556 /* menu.gif in Resources */,
 				975A73B31D3DBD4800CAC950 /* Assets.xcassets in Resources */,
 				975A73B11D3DBD4800CAC950 /* Main.storyboard in Resources */,
 			);
@@ -289,7 +294,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = N9G92VG962;
 				INFOPLIST_FILE = XMNPhotoFrameworkExample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.XMFraker.XMNPhotoFrameworkExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -300,7 +307,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = N9G92VG962;
 				INFOPLIST_FILE = XMNPhotoFrameworkExample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.XMFraker.XMNPhotoFrameworkExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";

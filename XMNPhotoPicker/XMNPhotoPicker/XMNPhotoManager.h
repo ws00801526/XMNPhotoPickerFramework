@@ -7,14 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <Photos/Photos.h>
+
+/** 8.0+ 使用Photos类库 */
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_8_0
+    #import <Photos/Photos.h>
+#endif
 #import <AssetsLibrary/AssetsLibrary.h>
 
 @class XMNAlbumModel;
 @class XMNAssetModel;
 @interface XMNPhotoManager : NSObject
 
-@property (nonatomic, strong, readonly)  PHCachingImageManager * _Nullable cachingImageManager;
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_8_0
+    @property (nonatomic, strong, readonly)  PHCachingImageManager * _Nullable cachingImageManager;
+#endif
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored"-Wdeprecated-declarations"
@@ -22,18 +28,23 @@
 #pragma clang diagnostic pop
 
 
-+ (instancetype _Nonnull)sharedManager;
-
-#pragma mark - Methods
-
 /**
  *  判断用户是否打开了图片授权
  *
  *  @return YES or NO
  */
-- (BOOL)hasAuthorized;
+@property (assign, nonatomic, readonly) BOOL hasAuthorized;
+/**
+ *  @brief 获取当前应用的授权状态
+ *  CLAuthorizationStatus  or PHAuthorizationStatus
+ *  @return
+ */
+@property (assign, nonatomic, readonly) NSUInteger authorizationStatus;
 
-- (NSUInteger)authorizationStatus;
+
++ (instancetype _Nonnull)sharedManager;
+
+#pragma mark - Methods
 
 /// ========================================
 /// @name   获取Album相册相关方法

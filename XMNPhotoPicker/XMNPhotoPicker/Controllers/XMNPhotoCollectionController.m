@@ -193,6 +193,7 @@ static NSString * const kXMNAssetCellIdentifier = @"XMNAssetCell";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
+    
     XMNAssetModel *assetModel = self.assets[indexPath.row];
     if (assetModel.type == XMNAssetTypeVideo) {
         XMNVideoPreviewController *videoPreviewC = [[XMNVideoPreviewController alloc] init];

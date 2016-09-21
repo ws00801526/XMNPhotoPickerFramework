@@ -13,6 +13,8 @@
 #import "XMNPhotoModel.h"
 #import "XMNPhotoBrowserTransition.h"
 
+#import "YYImage.h"
+
 static NSString * const kXMNPhotoBrowserCellIdentifier = @"com.XMFraker.XMNPhotoBrowser.kXMNPhotoBrowserCellIdentifier";
 
 @interface XMNPhotoBrowserController () <UIViewControllerTransitioningDelegate>
@@ -158,6 +160,12 @@ static NSString * const kXMNPhotoBrowserCellIdentifier = @"com.XMFraker.XMNPhoto
     [browserCell setSingleTapBlock:^(XMNPhotoBrowserCell *__weak _Nonnull browserCell) {
         
         __strong typeof(*&wSelf) self = wSelf;
+        XMNPhotoModel *photoModel = self.photos[indexPath.row];
+        
+        /** 保存gif图片的方法 */
+//        NSString *path = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"test.gif"];
+//        [[(YYImage *)photoModel.image animatedImageData] writeToFile:path atomically:YES];
+//        NSLog(@"path :%@",path);
         [self dismissViewControllerAnimated:YES completion:nil];
     }];
     return browserCell;

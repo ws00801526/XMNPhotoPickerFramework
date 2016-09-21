@@ -59,6 +59,7 @@
     
     self.assets = @[];
     
+    
     [self.view insertSubview:self.collectionView atIndex:0];
     UIBarButtonItem *controllerItem =  [[UIBarButtonItem alloc] initWithTitle:@"Controller" style:UIBarButtonItemStylePlain target:self action:@selector(_handleButtonAction)];
     UIBarButtonItem *pickerItem = [[UIBarButtonItem alloc] initWithTitle:@"Picker" style:UIBarButtonItemStylePlain target:self action:@selector(_handlePickerAction)];

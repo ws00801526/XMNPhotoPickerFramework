@@ -22,7 +22,9 @@
 
 @implementation XMNPhotoManager
 @synthesize assetLibrary = _assetLibrary;
-
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_8_0
+@synthesize cachingImageManager = _cachingImageManager;
+#endif
 
 #pragma mark - Life Cycle
 
@@ -40,6 +42,7 @@
 
 
 - (BOOL)hasAuthorized {
+    
     if (iOS8Later) {
         return [PHPhotoLibrary authorizationStatus] == PHAuthorizationStatusAuthorized;
     }else {
@@ -175,13 +178,14 @@
                 }
             }
             NSString *timeLength = type == XMNAssetTypeVideo ? [NSString stringWithFormat:@"%0.0f",asset.duration] : @"";
-            timeLength = [self _timeStringFromSeconds:[timeLength intValue]];
+            timeLength = [[self class] timeStringFromSeconds:[timeLength intValue]];
             [photoArr addObject:[XMNAssetModel modelWithAsset:asset type:type timeLength:timeLength]];
         }
         completionBlock ? completionBlock(photoArr) : nil;
     } else if ([result isKindOfClass:[ALAssetsGroup class]]) {
         ALAssetsGroup *gruop = (ALAssetsGroup *)result;
         if (!pickingVideoEnable) [gruop setAssetsFilter:[ALAssetsFilter allPhotos]];
+        
         [gruop enumerateAssetsUsingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) {
             /// Allow picking video
             
@@ -189,7 +193,7 @@
                 if ([[result valueForProperty:ALAssetPropertyType] isEqualToString:ALAssetTypeVideo] && pickingVideoEnable) {
                     NSTimeInterval duration = [[result valueForProperty:ALAssetPropertyDuration] integerValue];
                     NSString *timeLength = [NSString stringWithFormat:@"%0.0f",duration];
-                    timeLength = [self _timeStringFromSeconds:timeLength.floatValue];
+                    timeLength = [[self class] timeStringFromSeconds:timeLength.floatValue];
                     [photoArr addObject:[XMNAssetModel modelWithAsset:result type:XMNAssetTypeVideo timeLength:timeLength]];
                 } else {
                     [photoArr addObject:[XMNAssetModel modelWithAsset:result type:XMNAssetTypePhoto]];
@@ -209,24 +213,6 @@
         return XMNAssetTypeAudio;
     }
     return XMNAssetTypePhoto;
-}
-
-- (NSString *)_timeStringFromSeconds:(int)seconds {
-    NSString *newTime = @"";
-    if (seconds < 10) {
-        newTime = [NSString stringWithFormat:@"0:0%zd",seconds];
-    } else if (seconds < 60) {
-        newTime = [NSString stringWithFormat:@"0:%zd",seconds];
-    } else {
-        NSInteger min = seconds / 60;
-        NSInteger sec = seconds - (min * 60);
-        if (sec < 10) {
-            newTime = [NSString stringWithFormat:@"%zd:0%zd",min,sec];
-        } else {
-            newTime = [NSString stringWithFormat:@"%zd:%zd",min,sec];
-        }
-    }
-    return newTime;
 }
 
 /// ========================================
@@ -447,7 +433,11 @@
 #pragma mark - Getters
 
 - (PHCachingImageManager *)cachingImageManager {
-    return [[PHCachingImageManager alloc] init];
+    
+    if (!_cachingImageManager) {
+        _cachingImageManager = [[PHCachingImageManager alloc] init];
+    }
+    return _cachingImageManager;
 }
 
 - (ALAssetsLibrary *)assetLibrary {
@@ -462,6 +452,28 @@
 
 
 #pragma mark - Class Methods
+
+
+
++ (NSString *)timeStringFromSeconds:(int)seconds {
+    NSString *newTime = @"";
+    if (seconds < 10) {
+        newTime = [NSString stringWithFormat:@"0:0%zd",seconds];
+    } else if (seconds < 60) {
+        newTime = [NSString stringWithFormat:@"0:%zd",seconds];
+    } else {
+        NSInteger min = seconds / 60;
+        NSInteger sec = seconds - (min * 60);
+        if (sec < 10) {
+            newTime = [NSString stringWithFormat:@"%zd:0%zd",min,sec];
+        } else {
+            newTime = [NSString stringWithFormat:@"%zd:%zd",min,sec];
+        }
+    }
+    return newTime;
+}
+
+
 
 + (CGSize)adjustOriginSize:(CGSize)originSize
               toTargetSize:(CGSize)targetSize {
