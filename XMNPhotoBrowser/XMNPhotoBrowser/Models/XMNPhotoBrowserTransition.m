@@ -33,7 +33,11 @@
     if (toVC.sourceView) {
         
         /** 判断sourceview 是否设置了 */
-        UIView * snapShotView = [toVC.sourceView snapshotViewAfterScreenUpdates:NO];
+        UIView * snapShotView = [toVC.sourceView snapshotViewAfterScreenUpdates:YES];
+        if ([toVC.sourceView isKindOfClass:[UIImageView class]]) {
+            snapShotView = [[UIImageView alloc] initWithImage:[(UIImageView *)toVC.sourceView image]];
+        }
+        snapShotView.clipsToBounds = YES;
         snapShotView.contentMode = UIViewContentModeScaleAspectFill;
         snapShotView.frame = [containerView convertRect:toVC.sourceView.frame fromView:toVC.sourceView.superview ? : fromVC.view];
         toVC.sourceView.hidden = YES;
@@ -154,8 +158,9 @@
         
         XMNPhotoBrowserCell *browserCell = (XMNPhotoBrowserCell *)[fromVC.collectionView cellForItemAtIndexPath:indexPath];
 
-        UIView *snapShotView = [browserCell.imageView snapshotViewAfterScreenUpdates:NO];
+        UIImageView *snapShotView = [[UIImageView alloc] initWithImage:browserCell.imageView.image];
         snapShotView.contentMode = UIViewContentModeScaleAspectFill;
+        snapShotView.clipsToBounds = YES;
         snapShotView.frame = [containerView convertRect:browserCell.imageView.frame fromView:browserCell.imageView.superview ? : fromVC.view];
         
         /** 隐藏 返回的view */
@@ -198,7 +203,8 @@
     
     XMNPhotoBrowserCell *browserCell = (XMNPhotoBrowserCell *)[fromVC.collectionView cellForItemAtIndexPath:indexPath];
     
-    UIView *snapShotView = [browserCell.imageView snapshotViewAfterScreenUpdates:NO];
+    UIImageView *snapShotView = [[UIImageView alloc] initWithImage:browserCell.imageView.image];
+    snapShotView.clipsToBounds = YES;
     snapShotView.contentMode = UIViewContentModeScaleAspectFill;
     snapShotView.frame = [containerView convertRect:browserCell.imageView.frame fromView:browserCell.imageView.superview ? : fromVC.view];
     

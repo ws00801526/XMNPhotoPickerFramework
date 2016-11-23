@@ -55,7 +55,9 @@ CGFloat kXMNPhotoBrowserCellPadding = 16.f;
     
     /** 如果已经下载完毕 直接显示图片 不再去下载 */
     if (item.image) {
-        [self showImageWithFadeAnimation:item.image];
+        self.imageView.image = item.image;
+        self.imageView.alpha = 1.f;
+        [self resizeSubviews];
         return;
     }
     
